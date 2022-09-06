@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../css/style.css" type="text/css" media="all" />
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    
+      /* Optional: Makes the sample page fill the window. */
+      html, body ,#dvMap{
+        max-width: 1200px;
+  width: 100%;
+  max-height: 1200px;
+  height: 100%;
+  margin: 0px;
+  padding: 10px;
+  background-color: #f8f9fe;
+      }
+    </style>
+    <!-- Place this inside the HTML head; don't use async defer for now -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <script defer type="text/javascript" 
+    src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDh7U0aNiNGd0oLz7CLzdluscfw2ojSnsc&libraries=drawing"></script>
+
+
+
+  </head>
+  <body>
+  
+    <button class="btnOptionDeny animate__animated animate__bounceIn" style="margin-bottom: 8px;margin-top:-10px;font-size:12px;" onclick="deleteCow()">
+      <i class="bi bi-trash3-fill"></i>&nbsp;Eliminar nodo de ubicación</button>
+
+    <div id="dvMap"></div>
+
+    <script src="../js/monitoring.js"></script>
+
+  </body>
+</html>
