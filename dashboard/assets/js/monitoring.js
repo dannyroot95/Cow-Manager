@@ -14,6 +14,14 @@ let db = firebase.database();
 let db2 = firebase.firestore();
 var markers = []
 
+var sign = "Apetito"
+
+    $("#signs").on("change", function () {
+        var select = document.getElementById('signs');
+        var value = select.options[select.selectedIndex].text;
+        sign = value
+      });
+
 showCows()
 
 function showCows(){
@@ -112,7 +120,7 @@ function showCows(){
                                 +'</div>'+
 
                                 '<div style = "width:200px;min-height:15px;margin-top:8px;">' 
-                                +'<center><button class="btnOptionConfig animate__animated animate__bounceIn" style="font-size:10px;" onclick="reportCow('+data.lat+')">Reportar</button></center>'
+                                +'<center><button class="btnOptionConfig animate__animated animate__bounceIn" style="font-size:10px;" onclick="reportCow('+"'"+data.gender+","+data.title+","+data.lat+","+data.lng+"'"+')">Reportar</button></center>'
                                 +'</div>'
                                 );
                             infoWindow.open(map, marker);
@@ -127,6 +135,69 @@ function showCows(){
 
 
 function reportCow(data){
- alert(data)
+
+    var array = data.split(",")
+    var cow = array[1].split("cow")
+
+    MicroModal.show("modal-report")
+    document.getElementById("modal-title").innerHTML = "Reportar Vaca N°"+cow[1]
+
+    if(array[0] == "female"){
+        document.getElementById("gender").innerHTML = "Hembra"
+        document.getElementById("gender").style = "font-weight:bold;color:#FA276A;"
+        document.getElementById("img-gender").src = "../imgs/icon-cow.png"
+    }else{
+        document.getElementById("gender").innerHTML = "Macho"
+        document.getElementById("gender").style = "font-weight:bold;color:#0262AD;"
+        document.getElementById("img-gender").src = "../imgs/icon-cow-male.png"
+    }
+  
+    document.getElementById("latitude").innerHTML = array[2]
+    document.getElementById("longitude").innerHTML = array[3]
+    document.getElementById("date").innerHTML = onlyDateNumber(Date.now())+" - "+onlyHour(Date.now())
+
+
 }
 
+function xd(){
+    alert(sign)
+}
+
+function onlyDateNumber(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp);
+    var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+
+      if(date <=9){
+        date = "0"+date
+      }
+    var time = date + '/' + month + '/' + year;
+    return time;
+  }
+
+  function onlyHour(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp);
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+
+    var stringhour = hour
+    var stringmin = min
+    var stringseg = sec
+
+    if(hour <=9){
+      stringhour = "0"+hour
+   }
+    if(min <=9){
+       stringmin = "0"+min
+    }
+    if(sec <=9){
+      stringseg = "0"+sec
+    }
+
+    var time = stringhour + ':' + stringmin ;
+
+    return time;
+  }

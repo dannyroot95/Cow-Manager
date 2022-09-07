@@ -77,7 +77,7 @@ if (user.type == "super_admin") {
         </script>
 
         <li>
-          <a href="#dashboard">
+          <a href="#routes">
             <span class="icon">
             <ion-icon name="git-branch-outline"></ion-icon>
             </span>
@@ -85,7 +85,7 @@ if (user.type == "super_admin") {
           </a>
         </li>
         <script>;
-          window.open("#dashboard", "_self");
+          window.open("#routes", "_self");
         </script>
 
         <li>
@@ -246,6 +246,9 @@ function listaModulos_SA(modulo, contenedor) {
   } else if ("#monitoring" == modulo) {
     contenedor.innerHTML = urlModulo("assets/modules/monitoring.html");
     document.getElementById("start").innerText = "Monitoreo";
+  } else if ("#routes" == modulo) {
+    contenedor.innerHTML = urlModulo("assets/modules/routes.html");
+    document.getElementById("start").innerText = "Rutas";
   }else if ("#incidents" == modulo) {
     contenedor.innerHTML = urlModulo("assets/modules/incidents.html");
     document.getElementById("start").innerText = "Incidentes";
