@@ -89,6 +89,18 @@ if (user.type == "super_admin") {
         </script>
 
         <li>
+        <a href="#incidents">
+          <span class="icon">
+          <ion-icon name="list-outline"></ion-icon>
+          </span>
+          <span class="title">Incidentes</span>
+        </a>
+      </li>
+      <script>;
+        window.open("#incidents", "_self");
+      </script>
+
+        <li>
           <a href="#reports">
             <span class="icon">
               <ion-icon name="bar-chart-outline"></ion-icon>
@@ -234,13 +246,10 @@ function listaModulos_SA(modulo, contenedor) {
   } else if ("#monitoring" == modulo) {
     contenedor.innerHTML = urlModulo("assets/modules/monitoring.html");
     document.getElementById("start").innerText = "Monitoreo";
-  }else if ("#branchs" == modulo) {
-    contenedor.innerHTML = urlModulo("assets/modules/branchs.html");
-    document.getElementById("start").innerText = "Sucursales";
-  } else if ("#checkout" == modulo) {
-    contenedor.innerHTML = urlModulo("assets/modules/checkout.html");
-    document.getElementById("start").innerText = "Caja";
-  } else if ("#reports" == modulo) {
+  }else if ("#incidents" == modulo) {
+    contenedor.innerHTML = urlModulo("assets/modules/incidents.html");
+    document.getElementById("start").innerText = "Incidentes";
+  }else if ("#reports" == modulo) {
     contenedor.innerHTML = urlModulo("assets/modules/reports.html");
     document.getElementById("start").innerText = "Reportes";
   } else if ("#" == modulo) {

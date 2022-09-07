@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Incidentes</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="../css/table.css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="../../../spinner.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="../../../modal/micromodal.css" type="text/css" media="all" />
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" charset="utf-8"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script src="../../../modal/micromodal.js"></script>
+
+</head>
+<body>
+    
+    <div class="main-content">
+        <div class="container mt-7">
+          <div class="add animate__animated animate__bounceInDown" id="topitems">
+            <div id="topdiv"></div>
+            <div id="topdiv">
+              <input id="topsearch" type="text" placeholder="Buscar incidente...">
+            </div>
+          </div>
+          <!-- Table -->
+          <div class="row">
+            <div class="col">
+              <div class="card shadow">
+                <div class="table-responsive">
+                  <table class="table align-items-center table-flush" id="tableUsers">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col"id="tr1">
+                          <div style="display: flex; align-items: center; justify-content: flex-start;">
+                            #
+                          </div>
+                        </th>
+                        <th scope="col" id="tr2">
+                          <div style="display: flex; align-items: center; justify-content: flex-start;">
+                            <ion-icon name="calendar-outline"></ion-icon>&nbsp;Fecha
+                          </div>
+                        </th>
+                        <th scope="col" id="tr2">
+                            <div style="display: flex; align-items: center; justify-content: flex-start;">
+                            <ion-icon name="time-outline"></ion-icon>&nbsp;Hora
+                            </div>
+                          </th>
+                        <th scope="col" id="tr3">
+                          <div style="display: flex; align-items: center; justify-content: flex-start;">
+                          <ion-icon name="person-circle-outline"></ion-icon>&nbsp;Usuario
+                          </div>
+                        </th>
+                        <th scope="col" id="tr4">
+                          <div style="display: flex; align-items: center; justify-content: flex-start;">
+                          <ion-icon name="pin-outline"></ion-icon><b>&nbsp;Vaca
+                          </div>
+                        </th>
+                        <th scope="col" id="tr4">
+                            <div style="display: flex; align-items: center; justify-content: flex-start;">
+                              Detalles
+                            </div>
+                          </th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody">
+                      
+                    </tbody>
+                  </table>
+
+                  <div class="sk-folding-cube" id="cowsSpinner">
+                    <div class="sk-cube1 sk-cube"></div>
+                    <div class="sk-cube2 sk-cube"></div>
+                    <div class="sk-cube4 sk-cube"></div>
+                    <div class="sk-cube3 sk-cube"></div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="../js/incidents.js"></script>
+
+</body>
+</html>

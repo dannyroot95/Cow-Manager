@@ -33,7 +33,8 @@ function showCows(){
                     var lat = location.latitude
                     var lng = location.longitude
                     var time = location.time
-                    var obj = {title:childSnapshot.key,lat:lat,lng:lng,description:time}
+                    var gender = location.gender
+                    var obj = {title:childSnapshot.key,lat:lat,lng:lng,description:time,gender:gender}
                     markers.push(obj)
                 });
         
@@ -69,16 +70,32 @@ function showCows(){
                     url : '../imgs/icon-cow.png',
                     scaledSize: new google.maps.Size(50, 50)
                 }
+
+                var iconBase2 = {
+                    url : '../imgs/icon-cow-male.png',
+                    scaledSize: new google.maps.Size(50, 50)
+                }
          
                 for (var i = 0; i < markers.length; i++) {
                     var data = markers[i];
+                    var marker 
                     var myLatlng = new google.maps.LatLng(data.lat, data.lng);
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        map: map,
-                        icon: iconBase,
-                        title: data.description
-                    });
+                    if(data.gender == "male"){
+                        marker = new google.maps.Marker({
+                            position: myLatlng,
+                            map: map,
+                            icon: iconBase2,
+                            title: data.description
+                        });
+                    }else{
+                        marker = new google.maps.Marker({
+                            position: myLatlng,
+                            map: map,
+                            icon: iconBase,
+                            title: data.description
+                        });
+                    }
+               
          
                     //Attach click event to the marker.
                     (function (marker, data) {
@@ -95,7 +112,7 @@ function showCows(){
                                 +'</div>'+
 
                                 '<div style = "width:200px;min-height:15px;margin-top:8px;">' 
-                                +'<center><button class="btnOptionConfig animate__animated animate__bounceIn" style="font-size:10px;">Reportar</button></center>'
+                                +'<center><button class="btnOptionConfig animate__animated animate__bounceIn" style="font-size:10px;" onclick="reportCow('+data.lat+')">Reportar</button></center>'
                                 +'</div>'
                                 );
                             infoWindow.open(map, marker);
@@ -104,17 +121,12 @@ function showCows(){
                 }
 
             });
-            
         }    
-        
 }
 
 
-function init() {
 
-
-   
-  }
-
- 
+function reportCow(data){
+ alert(data)
+}
 
