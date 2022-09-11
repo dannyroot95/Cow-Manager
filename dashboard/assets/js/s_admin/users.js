@@ -114,9 +114,12 @@ db.collection("users").onSnapshot((snapshot) => {
       .map((user) => {
         var type = "";
         if (user.type == "super_admin") {
-          type = `Super Administrador <ion-icon name="construct-outline">`;
+          type = `Super Administrador <ion-icon name="people-circle-outline">`;
         } else if (user.type == "operator") {
-          type = `Operador <ion-icon name="chatbubbles-outline">`;
+          type = `Operador <ion-icon name="build-outline">`;
+        }
+        else if (user.type == "admin") {
+          type = `Administrador <ion-icon name="person-outline">`;
         }
         $("#usersSpinner").hide();
         return `
@@ -246,13 +249,9 @@ function resetNewData() {
   $("#npass").val("");
   $("#nphone").val("");
   $("#ntype").val("");
+  $("#nmail").val("");
 }
 
-function verifiedExists(dni) {
-  var exists = "false";
-
-  return false;
-}
 
 function Added() {
 
@@ -260,21 +259,23 @@ function Added() {
 
   var dni = $("#ndni").val();
   var name = $("#nname").val();
+  var email = $("#nmail").val();
   var pass = $("#npass").val();
   var phone = $("#nphone").val();
   var type = $("#ntype").val();
   var passEnc = btoa(pass);
-  var offcode = "";
+  
   var newUser = {
     dni: dni,
     name: name,
     pass: passEnc,
     phone: phone,
     type: type,
-    office_code: offcode
+    email:email,
+    id: ""
   };
 
-  if (dni != "" && name != "" && pass != "" && phone != "" && type != "") {
+  if (dni != "" && name != "" && pass != "" && phone != "" && type != "" && email != "") {
     if (dni.length == 8) {
       var dniResult = "";
 
@@ -292,7 +293,14 @@ function Added() {
             MicroModal.close("modal-2");
             return 0;
           } else {
-            db.collection("users").add(newUser).then(() => {
+
+            firebase.auth().createUserWithEmailAndPassword(email, pass).then((userCredential) => {
+
+            var user = userCredential.user.uid;
+
+            newUser.id = user
+
+            db.collection("users").doc(user).set(newUser).then(() => {
                 $("#bgspinner").hide();
                 MicroModal.close("modal-2");
                 Swal.fire(
@@ -307,6 +315,13 @@ function Added() {
                 MicroModal.close("modal-2");
                 alert(error);
               });
+
+            }).catch((error) => {
+              $("#bgspinner").hide();
+              MicroModal.close("modal-2");
+              alert(error);
+            });
+
           }
         })
         .catch((error) => {
@@ -476,13 +491,13 @@ $('#edni').on('input', function () {
   }
 })
 
-var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+var cors_api_url = "https://api.codetabs.com/v1/proxy/?quest=";
 
 function doCORSRequest(options, printResult) {
   var x = new XMLHttpRequest();
   x.open(options.method, cors_api_url + options.url);
-  x.onload = x.onerror = function() {
-    const result = printResult((x.responseText || ''));
+  x.onload = x.onerror = function () {
+    const result = printResult(x.responseText || "");
     /*
 
                     RETORNA EL VALOR EN UN JSON
@@ -491,8 +506,7 @@ function doCORSRequest(options, printResult) {
     return result;
   };
   if (/^POST/i.test(options.method)) {
-    x.setRequestHeader('Content-Type', 'application/json');
+    x.setRequestHeader("Content-Type", "application/json");
   }
   x.send(options.data);
 }
-
