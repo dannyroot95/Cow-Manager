@@ -159,8 +159,66 @@ function reportCow(data){
 
 }
 
-function xd(){
-    alert(sign)
+function registerIncident(){
+
+    var user = JSON.parse(localStorage.getItem("user"))
+    var splitter = (document.getElementById("modal-title").innerHTML).split("N°")
+    var cow = splitter[1]
+    var description = document.getElementById("description").value
+    var gender = document.getElementById("gender").innerHTML
+    var latitude = document.getElementById("latitude").innerHTML
+    var longitude = document.getElementById("longitude").innerHTML
+
+    if(description != ""){
+
+        document.getElementById("add").style = "display:none;"
+
+        if(gender == "Hembra"){
+            gender = "female"
+        }else{
+            gender = "male"
+        }
+
+        var obj = {
+            cow : cow,
+            date : Date.now(),
+            description : description,
+            gender : gender,
+            lat : parseFloat(latitude),
+            lng : parseFloat(longitude),
+            signs : sign,
+            user : user.name
+        }
+
+        db2.collection("incidents").add(obj).then(response =>{
+
+            document.getElementById("description").value = ""
+            MicroModal.close("modal-report")
+            document.getElementById("add").style = "display:block;background: #014581;color: #fff;"
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              
+              Toast.fire({
+                icon: 'success',
+                title: 'Incidente registrado!'
+              })
+           
+
+        })
+
+    }
+
+
 }
 
 function onlyDateNumber(UNIX_timestamp){

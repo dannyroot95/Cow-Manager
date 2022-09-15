@@ -92,6 +92,8 @@ function overlayClickListener(overlay) {
       }
       map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
       drawingManager.setMap(map);
+      vertices = ""
+      init()
   }
 
  
@@ -131,15 +133,25 @@ function overlayClickListener(overlay) {
   
       shapes.pop()
       saveToDatabase(shapes,label)
-      vertices = ""
-      init()
 
       }else{
-        alert("Ingrese un nombre al area!")
+
+        Swal.fire(
+          'Hey!',
+          'Ingrese un nombre al area!',
+          'warning'
+        )
+
       }
       
     }else{
-      alert("Agregue un area!")
+
+      Swal.fire(
+        'Hey!',
+        'Agregue un area!',
+        'warning'
+      )
+
     }
  
   }
@@ -221,11 +233,38 @@ function selectArea(label) {
 }
 
 function deleteAreaFromDB(){
+
+document.getElementById("deleteFooter").style = "display:none;"
+document.getElementById("deleteArea").style = "display:block;"
+
  db.collection("area").doc(idDeleteArea).delete().then(() =>{
   idDeleteArea = ""
   MicroModal.close("delete-area")
+
   init()
-  alert("Eliminado")
+ 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+  
+  Toast.fire({
+    icon: 'success',
+    title: 'Área eliminada!'
+  })
+
+  document.getElementById("deleteArea").style = "display:none;"
+  document.getElementById("deleteFooter").style = "display: flex; justify-content: space-around;margin-top: -20px;"  
+
+  google.maps.event.addDomListener(window, 'load', selectArea(null));
+
  }).catch((error) => {
   console.error("Error : ", error);
 });
@@ -233,10 +272,45 @@ function deleteAreaFromDB(){
 }
 
 function saveToDatabase(shapes,label){
+
+  document.getElementById("areaFooter").style = "display:none;"
+  document.getElementById("savingArea").style = "display:block;"
+
   db.collection("area").add({shapes,label:label}).then(snap =>{
-    alert("guardado")
+
+    MicroModal.close("modal-area")
+    document.getElementById("label").value = ""
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+      
+      Toast.fire({
+        icon: 'success',
+        title: 'Area de pastoreo registrada!'
+      })
+
+    document.getElementById("savingArea").style = "display:none;"
+    document.getElementById("areaFooter").style = "display: flex; justify-content: space-around;margin-top: -20px;"  
+
     deleteMarkers()
   })
+}
+
+function cancelDeleteArea(){
+  google.maps.event.addDomListener(window, 'load', selectArea(null));
+}
+
+function cancelAddArea(){
+  document.getElementById("label").value = "" 
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
