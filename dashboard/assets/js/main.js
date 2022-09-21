@@ -24,6 +24,7 @@ if (localStorage.getItem("user") !== null) {
 
 function logout() {
   localStorage.removeItem("user");
+  localStorage.removeItem("reference");
   window.location.reload();
 }
 
@@ -48,3 +49,4 @@ toggle.onclick = function () {
   navigation.classList.toggle("active");
   main.classList.toggle("active");
 };
+

@@ -16,9 +16,14 @@ var drawingManager
 var shapes = []  
 var vertices = ""
 var idDeleteArea = ""
+var point = {}
 
 function showArea(){
   MicroModal.show("modal-area")
+}
+
+function showReference(){
+  MicroModal.show("reference-area")
 }
 
 function deleteArea(){
@@ -36,12 +41,110 @@ function deleteArea(){
   })
 }
 
-function initialize() {
-  
-  var myLatlng = new google.maps.LatLng(-12.5746489620646, -69.16789782379598);
+function initializeReference() {
+  // Configuración del mapa
 
+  var latitude 
+  var longitude
+
+  var reference = JSON.parse(localStorage.getItem("reference"));
+  if (reference != null && reference != "" && reference != undefined) {
+
+    latitude = reference.lat
+    longitude = reference.lng
+
+  }else{
+     latitude = -12.5746489620646
+     longitude = -69.16789782379598
+  }
+
+
+  var mapProp = {
+    center: new google.maps.LatLng(latitude, longitude),
+    zoom: 15,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  // Agregando el mapa al tag de id googleMap
+  var map = new google.maps.Map(document.getElementById("googleMapReference"), mapProp);
+  
+  // Creando un marker en el mapa
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(latitude, longitude),
+    map: map,
+    title: 'Mi poscición',
+    draggable: true //que el marcador se pueda arrastrar
+  });
+ 
+  // Registrando el evento drag, en este caso imprime 
+  // en consola la latitud y longitud
+  google.maps.event.addListener(marker,'drag',function(event) {
+    point = {lat:event.latLng.lat(),lng:event.latLng.lng(),zoom:14}
+  });
+}
+
+function saveReference(){
+   if(Object.entries(point).length != 0){
+
+    document.getElementById("footerReference").style = "display:none;"
+    document.getElementById("save_reference").style = "display:block;"
+
+    db.collection("reference").doc("point").set(point).then(response =>{
+
+      localStorage.setItem("reference", JSON.stringify(point));
+      document.getElementById("footerReference").style = "display: flex; justify-content: space-around;margin-top: -20px;"
+      document.getElementById("save_reference").style = "display:none;"
+      MicroModal.close("reference-area")
+      closeReference()
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+          location.reload()
+        }
+      })
+      
+      Toast.fire({
+        icon: 'success',
+        title: 'Ubicación guardada!'
+      })
+      
+    })
+      
+   }else{
+    Swal.fire(
+      'Hey!',
+      'Agregue un punto de referencia!',
+      'info'
+    )
+   }
+}
+
+function closeReference(){
+  point = {}
+}
+
+function initialize() {
+
+  var myLatlng 
+  var reference = JSON.parse(localStorage.getItem("reference"));
+
+  if (reference != null && reference != "" && reference != undefined) {
+
+    myLatlng = new google.maps.LatLng(reference.lat, reference.lng);
+
+  }else{
+      myLatlng = new google.maps.LatLng(-12.5746489620646, -69.16789782379598);
+  }
+  
+ 
   var myOptions = {
-    zoom: 13,
+    zoom: 14,
     center: myLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
@@ -84,7 +187,17 @@ function overlayClickListener(overlay) {
   function deleteMarkers() {
     shapes = []
     vertices = ""
-    var myLatlng = new google.maps.LatLng(-12.5746489620646, -69.16789782379598);
+
+    var myLatlng 
+    var reference = JSON.parse(localStorage.getItem("reference"));
+  
+    if (reference != null && reference != "" && reference != undefined) {
+  
+      myLatlng = new google.maps.LatLng(reference.lat, reference.lng);
+  
+    }else{
+        myLatlng = new google.maps.LatLng(-12.5746489620646, -69.16789782379598);
+    }
     var myOptions = {
         zoom: 13,
         center: myLatlng,
@@ -164,9 +277,23 @@ function init() {
 
   db.collection("area").get().then(snapshot =>{
 
+    var latitude 
+    var longitude
+  
+    var reference = JSON.parse(localStorage.getItem("reference"));
+    if (reference != null && reference != "" && reference != undefined) {
+  
+      latitude = reference.lat
+      longitude = reference.lng
+  
+    }else{
+       latitude = -12.5746489620646
+       longitude = -69.16789782379598
+    }
+
     const map = new google.maps.Map(document.getElementById("mapa"), {
       zoom: 14,
-      center: { lat: -12.5746489620646, lng: -69.16789782379598 },
+      center: { lat: latitude, lng: longitude },
       mapTypeId: "terrain",
     });
 
@@ -205,9 +332,23 @@ function selectArea(label) {
   
   db.collection("area").where("label", "==", label).get().then(snapshot =>{
 
+    var latitude 
+    var longitude
+  
+    var reference = JSON.parse(localStorage.getItem("reference"));
+    if (reference != null && reference != "" && reference != undefined) {
+  
+      latitude = reference.lat
+      longitude = reference.lng
+  
+    }else{
+      latitude = -12.5746489620646
+      longitude = -69.16789782379598
+    }
+
     const map = new google.maps.Map(document.getElementById("map-canvas-2"), {
       zoom: 13,
-      center: { lat: -12.5746489620646, lng: -69.16789782379598 },
+      center: { lat: latitude, lng: longitude},
       mapTypeId: "terrain",
     });
 
@@ -316,4 +457,5 @@ function cancelAddArea(){
 google.maps.event.addDomListener(window, 'load', initialize);
 google.maps.event.addDomListener(window, 'load', init);
 google.maps.event.addDomListener(window, 'load', selectArea(null));
+google.maps.event.addDomListener(window, 'load', initializeReference);
 

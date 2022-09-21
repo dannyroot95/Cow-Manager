@@ -92,8 +92,9 @@
              
               
           </main>
-          <footer class="modal__footer" style="display: flex; justify-content: space-around">
-            <button class="modal__btn modal__btn-primary" style="background: #014581;color: #fff;" id="add" onclick="registerIncident()">Reportar</button>
+          <center><label id="registering" style="display: none;">Registrando incidente....</label></center>
+          <footer class="modal__footer" style="display: flex; justify-content: space-around" id="add">
+            <button class="modal__btn modal__btn-primary" style="background: #014581;color: #fff;" onclick="registerIncident()">Reportar</button>
             <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
               Cancelar
             </button>

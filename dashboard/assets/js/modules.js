@@ -1,17 +1,19 @@
-verifyDataLocale()
+
 
 var firebaseConfig = {
-  apiKey: "AIzaSyDWJ2-qaRK94IR98HGgbuQkO8AgPHFFyB8",
-  authDomain: "atm-transfers.firebaseapp.com",
-  projectId: "atm-transfers",
-  storageBucket: "atm-transfers.appspot.com",
-  messagingSenderId: "307303267152",
-  appId: "1:307303267152:web:c091d3d494bcea2b094a55",
+  apiKey: "AIzaSyC1rPBlZGVhDoca5IRkQYMOPsEJU_lKi5Q",
+  authDomain: "cowiot.firebaseapp.com",
+  databaseURL: "https://cowiot-default-rtdb.firebaseio.com",
+  projectId: "cowiot",
+  storageBucket: "cowiot.appspot.com",
+  messagingSenderId: "359413020575",
+  appId: "1:359413020575:web:2e64e053c12b4794d1afaa"
 };
 
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
-var base64String = "";
+
+getReference()
 
 if (user.type == "super_admin") {
   console.log("super admin");
@@ -281,84 +283,15 @@ linkModulo.forEach((elemento) => {
 });
 
 
-function saveProfileData(){
+function getReference(){
+ 
+  db.collection("reference").doc("point").get().then((reference) =>{
 
-  var name_local = document.getElementById("name_local").value
-  var ruc = document.getElementById("ruc").value
-  var address = document.getElementById("address").value
-  var phone_profile = document.getElementById("phone_profile").value
-
-  if(base64String != ""){
-    base64String = "data:image/png;base64,"+base64String
-  }
-
-  if(name_local != "" && ruc != "" && address != "" && phone_profile != ""){
-
-    var data_obj = {
-      name_local:name_local,ruc:ruc,address:address,phone_profile:phone_profile,image:base64String
+    if(reference.exists){
+        var point = {lat:reference.data().lat,lng:reference.data().lng,zoom:reference.data().zoom}
+        localStorage.setItem("reference",JSON.stringify(point))
+        console.log(point)
     }
 
-    db.collection("locale_data").doc(user.id).set(data_obj).then((result) => {
-      localStorage.setItem("localeData", JSON.stringify(data_obj));
-      Swal.fire(
-        "¡Éxito!",
-        "Se configuró correctamente",
-        "success"
-      )
-      MicroModal.close('modal-profile')
-    }).catch(error =>{
-      Swal.fire(
-        "Error!",
-        "No se guardaron los datos",
-        "error"
-      )
-    })
-  }else{
-    Swal.fire(
-      "Oops!",
-      "Complete los campos",
-      "warning"
-    )
-  } 
-
-}
-
-function Uploaded() {
-	var file = document.querySelector(
-		'input[type=file]')['files'][0];
-	var reader = new FileReader();
-	reader.onload = function () {
-		base64String = reader.result.replace("data:", "")
-			.replace(/^.+,/, "");
-		imageBase64Stringsep = base64String;
-	}
-	reader.readAsDataURL(file);
-  const objectURL = URL.createObjectURL(file);
-   document.getElementById("myLogo").src = objectURL
-   document.getElementById("no-logo").innerHTML = '<label style="font-size: 12px;margin-left:12px;">Mi logo</label>'
-}
-
-function display() {
-	console.log("Base64String about to be printed");
-	alert(base64String);
-}
-
-function verifyDataLocale(){
-
-  var data = localStorage.getItem("localeData")
-  var json = JSON.parse(data)
-
-  if(json != null && json != ""){
-    document.getElementById("name_local").value = json.name_local
-    document.getElementById("ruc").value = json.ruc
-    document.getElementById("address").value = json.address
-    document.getElementById("phone_profile").value = json.phone_profile
-
-    if(json.image != ""){
-      document.getElementById("myLogo").src = json.image
-      document.getElementById("no-logo").innerHTML = '<label style="font-size: 12px;margin-left:12px;">Mi logo</label>'
-    }
-
-  }
-
+  })
 }

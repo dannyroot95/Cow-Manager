@@ -45,9 +45,20 @@ function showCows(){
                     var obj = {title:childSnapshot.key,lat:lat,lng:lng,description:time,gender:gender}
                     markers.push(obj)
                 });
+
+                var latitude 
+                var longitude
+                var reference = JSON.parse(localStorage.getItem("reference"));
+                if (reference != null && reference != "" && reference != undefined) {
+                    latitude = reference.lat
+                    longitude = reference.lng
+                }else{
+                    latitude = markers[0].lat
+                    longitude = markers[0].lng
+                }
         
                 var mapOptions = {
-                    center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+                    center: new google.maps.LatLng(latitude, longitude),
                     zoom: 14,
                     mapTypeId: 'terrain'
                 };
@@ -116,7 +127,7 @@ function showCows(){
                                 +'<label>'+'<strong>Vaca N°'+num_cow[1]+'</strong>'+'</label>'
                                 +'</div>'+
                                 '<div style = "width:200px;min-height:15px">' 
-                                +'<label><strong>Fecha : </strong>'+ data.description +'</label>'
+                                +'<label><strong>Fecha : </strong>'+onlyDateNumber(data.description*1000)+" - "+onlyHour(data.description*1000)+'</label>'
                                 +'</div>'+
 
                                 '<div style = "width:200px;min-height:15px;margin-top:8px;">' 
@@ -172,6 +183,7 @@ function registerIncident(){
     if(description != ""){
 
         document.getElementById("add").style = "display:none;"
+        document.getElementById("registering").style = "display:block;"
 
         if(gender == "Hembra"){
             gender = "female"
@@ -192,9 +204,10 @@ function registerIncident(){
 
         db2.collection("incidents").add(obj).then(response =>{
 
+            document.getElementById("registering").style = "display:none;"
             document.getElementById("description").value = ""
             MicroModal.close("modal-report")
-            document.getElementById("add").style = "display:block;background: #014581;color: #fff;"
+            document.getElementById("add").style = "display: flex; justify-content: space-around;"
 
             const Toast = Swal.mixin({
                 toast: true,
