@@ -61,7 +61,7 @@ function initializeReference() {
 
   var mapProp = {
     center: new google.maps.LatLng(latitude, longitude),
-    zoom: 15,
+    zoom: 16,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   // Agregando el mapa al tag de id googleMap
@@ -78,7 +78,7 @@ function initializeReference() {
   // Registrando el evento drag, en este caso imprime 
   // en consola la latitud y longitud
   google.maps.event.addListener(marker,'drag',function(event) {
-    point = {lat:event.latLng.lat(),lng:event.latLng.lng(),zoom:14}
+    point = {lat:event.latLng.lat(),lng:event.latLng.lng(),zoom:17}
   });
 }
 
@@ -144,7 +144,7 @@ function initialize() {
   
  
   var myOptions = {
-    zoom: 14,
+    zoom: 16,
     center: myLatlng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   }
@@ -199,7 +199,7 @@ function overlayClickListener(overlay) {
         myLatlng = new google.maps.LatLng(-12.5746489620646, -69.16789782379598);
     }
     var myOptions = {
-        zoom: 13,
+        zoom: 16,
         center: myLatlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
@@ -207,6 +207,7 @@ function overlayClickListener(overlay) {
       drawingManager.setMap(map);
       vertices = ""
       init()
+      document.getElementById("label").value = ""
   }
 
  
@@ -292,7 +293,7 @@ function init() {
     }
 
     const map = new google.maps.Map(document.getElementById("mapa"), {
-      zoom: 14,
+      zoom: 16,
       center: { lat: latitude, lng: longitude },
       mapTypeId: "terrain",
     });
@@ -347,7 +348,7 @@ function selectArea(label) {
     }
 
     const map = new google.maps.Map(document.getElementById("map-canvas-2"), {
-      zoom: 13,
+      zoom: 16,
       center: { lat: latitude, lng: longitude},
       mapTypeId: "terrain",
     });

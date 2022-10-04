@@ -110,6 +110,9 @@ if (user.type == "super_admin") {
             <span class="title">Reportes</span>
           </a>
         </li>
+        <script>;
+        window.open("#dashboard", "_self");
+      </script>
 
         <li>
           <a href="#" onclick="logout()">
@@ -238,7 +241,7 @@ function listaModulos_A(modulo, contenedor) {
 function listaModulos_SA(modulo, contenedor) {
   if ("#dashboard" == modulo) {
     contenedor.innerHTML = urlModulo("assets/modules/dashboard.html");
-    document.getElementById("start").innerText = "";
+    document.getElementById("start").innerText = "Panel de datos";
   } else if ("#users" == modulo) {
     contenedor.innerHTML = urlModulo("assets/modules/users.html");
     document.getElementById("start").innerText = "Usuarios";

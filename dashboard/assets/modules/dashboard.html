@@ -2,22 +2,108 @@
 <html>
 
 <head>
-    <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Cow</title>
+    <title>Inicio</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" charset="utf-8"></script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDh7U0aNiNGd0oLz7CLzdluscfw2ojSnsc&libraries=visualization">
+    </script>
+  
     <link rel='stylesheet' type='text/css' media='screen' href='../css/style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href="../css/charts.css">
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
     <script src='../js/main.js'></script>
 </head>
 
 <body>
 
-    <center>
-        <h1 class="login-title" style="margin-top: 5%;">Cow Manager</h1>
-        <img src="../imgs/cowlogo.png" width="35%" height="35%">
-    </center>
-  
-   
+    <!-- ======================= Cards ================== -->
+    <div class="cardBox">
+        <div class="card">
+            <div>
+                <div class="numbers">12</div>
+                <div class="cardName">Vacas</div>
+            </div>
+
+            <div class="iconBx">
+                <ion-icon name="grid-outline"></ion-icon>
+            </div>
+        </div>
+
+        <div class="card">
+            <div>
+                <div class="numbers">12000</div>
+                <div class="cardName">Puntos registrados</div>
+            </div>
+
+            <div class="iconBx">
+                <ion-icon name="shuffle-outline"></ion-icon>
+                </ion-icon>
+            </div>
+        </div>
+
+        <div class="card">
+            <div>
+                <div class="numbers">4</div>
+                <div class="cardName">Áreas registradas</div>
+            </div>
+
+            <div class="iconBx">
+                <ion-icon name="albums-outline"></ion-icon>
+            </div>
+        </div>
+
+        <div class="card">
+            <div>
+                <div class="numbers">12</div>
+                <div class="cardName">Registros</div>
+            </div>
+
+            <div class="iconBx">
+                <ion-icon name="cash-outline"></ion-icon>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================ Order Details List ================= -->
+    <div>
+        <div style="padding: 6px;">
+            <div class="cardHeader" style="margin-left: 24px;">
+                <h2>Informacion de enfermedades</h2>
+            </div>
+
+            <div id="radarChart" class="chart--container">
+            </div>
+
+            <br>
+
+            <div id="dashChart" class="chart--container">
+            </div>
+
+            <br>
+
+           
+                <div class="cardHeader" style="margin-left: 18px;">
+                    <h2>Mapa de calor de rutas</h2>
+                    <br>
+                </div>
+             <div id="map" style="width: 100%;max-width: 1920px;height:800px;"></div>
+        
+
+        </div>
+       </div>
+       
+         
+     
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="../js/charts.js"></script>
+    <script src="../js/dashboard.js"></script>
+    
+
 </body>
 
 </html>
