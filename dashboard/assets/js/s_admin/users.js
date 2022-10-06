@@ -483,11 +483,6 @@ $('#edni').on('input', function () {
       $('#ename').removeAttr('disabled');
       $('#edit').removeAttr('disabled');
     });
-
-      //$('#ename').val(`${data.result.nombres} ${data.result.paterno} ${data.result.materno}`);
-      //$(this).removeAttr('disabled');
-      //$('#ename').removeAttr('disabled');
-      //$('#edit').removeAttr('disabled');
   }
 })
 

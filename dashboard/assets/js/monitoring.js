@@ -59,7 +59,7 @@ function showCows(){
         
                 var mapOptions = {
                     center: new google.maps.LatLng(latitude, longitude),
-                    zoom: 14,
+                    zoom: 16,
                     mapTypeId: 'terrain'
                 };
                 var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
