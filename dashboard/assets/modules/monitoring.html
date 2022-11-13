@@ -37,11 +37,16 @@
     <script src="../../../modal/micromodal.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" charset="utf-8"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/tableJS/jspdf.min.js"></script>
+    <script src="../js/tableJS/jspdf.plugin.autotable.min.js"></script>
   </head>
   <body>
   
     <button class="btnOptionDeny animate__animated animate__bounceIn" style="margin-bottom: 8px;margin-top:-10px;font-size:12px;" onclick="deleteCow()">
       <i class="bi bi-trash3-fill"></i>&nbsp;Eliminar nodo</button>
+
+      <button id="btn-info" class="btnOption animate__animated animate__bounceIn" style="display: none;" onclick="printData()">
+       &nbsp;Imprimir información</button>
 
     <div id="dvMap"></div>
 
@@ -75,7 +80,6 @@
                 </select>
               </div>
              
-
               <div class="form-item small">
                 <label class="form-label" for="Names">Descripcion</label>
                 <textarea class="small" style="width: 250px;" type="textarea" name="Names"

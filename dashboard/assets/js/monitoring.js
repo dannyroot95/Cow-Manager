@@ -13,6 +13,7 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.database();
 let db2 = firebase.firestore();
 var markers = []
+var infoCowsArray = []
 
 var sign = "Apetito"
 
@@ -23,6 +24,7 @@ var sign = "Apetito"
       });
 
 showCows()
+infoCows()
 
 function showCows(){
 
@@ -304,7 +306,7 @@ function onlyDateNumber(UNIX_timestamp){
         if(ctx == 0){
             document.getElementById("query-cow").innerHTML = "No existen datos!"
             document.getElementById("query-cow").style = "color: red;font-weight:bold;" 
-            document.getElementById("footer-data-cow").innerHTML = `<button class="modal__btn modal__btn-primary" style="background: #fc0000;color: #fff;">Guardar datos</button>
+            document.getElementById("footer-data-cow").innerHTML = `<button onclick="saveInfoCow('${idCow}')" class="modal__btn modal__btn-primary" style="background: #fc0000;color: #fff;">Guardar datos</button>
             <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
             Cancelar
             </button>`
@@ -316,13 +318,13 @@ function onlyDateNumber(UNIX_timestamp){
             document.getElementById("species").value = cow.specie
             document.getElementById("race").value = cow.race
             document.getElementById("age").value = cow.age
-            document.getElementById("birth-cow").value = "12/12/2022"
+            document.getElementById("birth-cow").value  = cow.cow_birth
             document.getElementById("weight-cow").value = cow.weight
             document.getElementById("status-cow").value = cow.status
             document.getElementById("origin-cow").value = cow.origin
             document.getElementById("detail-cow").value = cow.details
 
-            document.getElementById("footer-data-cow").innerHTML = `<button class="modal__btn modal__btn-primary" style="background: #145A32;color: #fff;">Editar datos</button>
+            document.getElementById("footer-data-cow").innerHTML = `<button onclick="editInfoCow('${idCow}')" class="modal__btn modal__btn-primary" style="background: #145A32;color: #fff;">Editar datos</button>
             <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
             Cancelar
             </button>`
@@ -334,3 +336,144 @@ function onlyDateNumber(UNIX_timestamp){
     });
 
   }
+
+  function saveInfoCow(id){
+
+    var name = document.getElementById("common-name").value
+    var specie = document.getElementById("species").value
+    var race = document.getElementById("race").value
+    var age = document.getElementById("age").value
+    var birth = document.getElementById("birth-cow").value
+    var weight = document.getElementById("weight-cow").value
+    var status = document.getElementById("status-cow").value
+    var origin = document.getElementById("origin-cow").value
+    var details = document.getElementById("detail-cow").value
+
+    if(name != "" && specie != "" && race != "" && age != "" && birth != "" && weight != "" && status != "" && origin != "" && details != ""){
+
+        var data = {
+            age : age,
+            common_name : name,
+            cow : parseInt(id),
+            cow_birth : birth,
+            details : details,
+            origin : origin,
+            race : race,
+            specie : specie,
+            status : status,
+            weight : weight
+        }
+
+        db2.collection("info_cow").add(data)
+
+        MicroModal.close("modal-data-cow")
+
+        Swal.fire(
+            'Muy bien!',
+            'Los datos han sido registrados!',
+            'success'
+          )
+
+    }else{
+        Swal.fire(
+            'Hey!',
+            'Complete los campos!',
+            'error'
+          )
+    }
+
+  }
+
+  function editInfoCow(id){
+
+    var name = document.getElementById("common-name").value
+    var specie = document.getElementById("species").value
+    var race = document.getElementById("race").value
+    var age = document.getElementById("age").value
+    var birth = document.getElementById("birth-cow").value
+    var weight = document.getElementById("weight-cow").value
+    var status = document.getElementById("status-cow").value
+    var origin = document.getElementById("origin-cow").value
+    var details = document.getElementById("detail-cow").value
+
+    if(name != "" && specie != "" && race != "" && age != "" && birth != "" && weight != "" && status != "" && origin != "" && details != ""){
+
+        var data = {
+            age : age,
+            common_name : name,
+            cow : parseInt(id),
+            cow_birth : birth,
+            details : details,
+            origin : origin,
+            race : race,
+            specie : specie,
+            status : status,
+            weight : weight
+        }
+
+        db2.collection("info_cow").where("cow","==",parseInt(id)).get().then((query)=>{
+
+            query.forEach((e) =>{
+                console.log(e.data())
+                if(e.data().cow == id){
+                   
+                    db2.collection("info_cow").doc(e.id).update(data)
+                    MicroModal.close("modal-data-cow")
+                    Swal.fire(
+                        'Muy bien!',
+                        'Los datos han sido actualizados!',
+                        'success'
+                      )
+                }
+            })
+
+        })
+
+    }else{
+        Swal.fire(
+            'Hey!',
+            'Complete los campos!',
+            'error'
+          )
+    }
+}
+
+function infoCows(){
+    var ctx = 0
+    db2.collection("info_cow").get().then((snap) =>{
+        snap.forEach((e)=>{
+            ctx++
+            infoCowsArray.push([ctx,e.data().cow,e.data().common_name.toUpperCase(),
+                e.data().specie.toUpperCase(),e.data().race.toUpperCase(),e.data().cow_birth,e.data().weight+"kg"])
+        })
+        document.getElementById("btn-info").style = "display:inline;margin-bottom: 8px;margin-top:-10px;font-size:12px;"
+    })
+}
+
+function printData(){
+
+    var doc = new jspdf.jsPDF()
+    doc.setFontSize(26)
+    doc.text(30, 16, "Cow Manager")
+    doc.setFontSize(8)
+    doc.text(30, 22, "Datos de informacion de animales : "+onlyDateNumber(Date.now()))
+    doc.setFontSize(9)
+    doc.text(155, 14, "RUC : "+"121212121212")
+    doc.text(155, 19, "Direccion : "+"Jr.Los girasoles Mz6 L9")
+    doc.text(155, 24, "Teléfono : "+"+51989280394")
+	  doc.setFontSize(12)
+	  doc.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
+      doc.autoTable({
+      head: [['#','ID Vaca','Nombre común','Especie','Raza','Fecha de nacimiento','Peso']],
+      body: infoCowsArray,
+      theme: 'grid',
+      styles : { halign : 'center'},
+     headStyles :{fillColor : [0, 142, 118]}, 
+     alternateRowStyles: {fillColor : [221, 252, 248]}, 
+     tableLineColor: [0, 142, 118], 
+     tableLineWidth: 0.1,
+     margin: {top: 30},
+      })
+      doc.save('Informacion de animales_'+onlyDateNumber(Date.now())+'.pdf')
+  
+    }
