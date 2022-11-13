@@ -12,6 +12,7 @@ var firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
   let db = firebase.firestore();
   var incidents = []
+  var arrayInc = []
 
   allIncidents()
 
@@ -30,6 +31,7 @@ var firebaseConfig = {
             incidents
               .map((file) => {
                 ctx++
+                arrayInc.push([ctx,onlyDateNumber(file.date),onlyHour(file.date),file.cow,file.user,file.signs,file.description])
                 $("#cowsSpinner").hide();
                 return `
                   <tr>
@@ -61,7 +63,7 @@ var firebaseConfig = {
               })
               .join("")
           );
-       
+       document.getElementById("btn-print").style = "display: block;background: #014581;color: #fff;"
     })
 
   }
@@ -107,13 +109,63 @@ var firebaseConfig = {
   }
 
   function setData(cow, date, description, gender, lat , lng , user) {
+
+    var genderX = ""
+
+    if(gender == "male"){
+      genderX = "Macho"
+    }else{genderX = "Hembra"}
+
     MicroModal.show("modal-1");
-    $("#edni").val(dni);
-    $("#ename").val(name);
-    $("#ephone").val(phone);
-    edit_dni_user = dni;
-    edit_name_user = name;
-    edit_phone = phone;
-    edit_id_user = id;
-    edit_type_user = type;
+    document.getElementById("date-register").innerHTML = onlyDateNumber(parseInt(date))
+    document.getElementById("id-cow").innerHTML = '#'+cow
+    document.getElementById("gender-cow").innerHTML = genderX
+    window.initMap = initMap(lat,lng)
+    document.getElementById("description").value = description
+    document.getElementById("register_by").innerHTML = user
   }
+
+
+
+  function initMap(lat,lon) {
+    const myLatLng = { lat: parseFloat(lat), lng: parseFloat(lon) };
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 16,
+      center: myLatLng,
+    });
+  
+    new google.maps.Marker({
+      position: myLatLng,
+      map,
+      title: "Hello World!",
+    });
+  }
+  
+  
+  function printData(){
+
+    var doc = new jspdf.jsPDF()
+    doc.setFontSize(26)
+    doc.text(30, 16, "Cow Manager")
+    doc.setFontSize(8)
+    doc.text(30, 22, "Fecha de generacion del reporte de incidentes : "+onlyDateNumber(Date.now()))
+    doc.setFontSize(9)
+    doc.text(155, 14, "RUC : "+"121212121212")
+    doc.text(155, 19, "Direccion : "+"Jr.Los girasoles Mz6 L9")
+    doc.text(155, 24, "Teléfono : "+"+51989280394")
+	  doc.setFontSize(12)
+	  doc.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
+      doc.autoTable({
+      head: [['#','Fecha de incidente','Hora','ID Vaca','Reportado por','Signos','Detalles']],
+      body: arrayInc,
+      theme: 'grid',
+      styles : { halign : 'center'},
+     headStyles :{fillColor : [0, 142, 24]}, 
+     alternateRowStyles: {fillColor : [221, 252, 216]}, 
+     tableLineColor: [0, 142, 24], 
+     tableLineWidth: 0.1,
+     margin: {top: 30},
+      })
+      doc.save('Reporte general de incidentes_'+onlyDateNumber(Date.now())+'.pdf')
+  
+    }

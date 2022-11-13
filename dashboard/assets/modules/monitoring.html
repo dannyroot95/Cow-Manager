@@ -63,11 +63,15 @@
               <div class="form-item small">
                 <label class="form-label small" for="Phone">Signos : </label>
                 <select class="btnOption" style="font-size: 14px;" id="signs">
-                  <option value="0" style="font-size: 14px;">Apetito</option>
-                  <option value="1" style="font-size: 14px;">Digestion</option>
-                  <option value="2" style="font-size: 14px;">Postura y movimiento</option>
-                  <option value="2" style="font-size: 14px;">Ojos y ojeras</option>
-                  <option value="2" style="font-size: 14px;">Piel</option>
+                  <option value="0" style="font-size: 14px;">MASTITIS</option>
+                  <option value="1" style="font-size: 14px;">BABESIOSIS</option>
+                  <option value="2" style="font-size: 14px;">BRUCELOSIS</option>
+                  <option value="3" style="font-size: 14px;">FIEBRE AFTOSA</option>
+                  <option value="4" style="font-size: 14px;">TUBERCULOSIS</option>
+                  <option value="5" style="font-size: 14px;">CLOSTRIDIOSIS</option>
+                  <option value="6" style="font-size: 14px;">LEPTOSPIROSIS</option>
+                  <option value="7" style="font-size: 14px;">PROBLEMAS EN LAS PEZUÑAS</option>
+                  <option value="8" style="font-size: 14px;">PARÁSITOS</option>
                 </select>
               </div>
              
@@ -98,6 +102,80 @@
             <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
               Cancelar
             </button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal micromodal-slide" id="modal-data-cow" aria-hidden="true">
+      <div class="modal__overlay" tabindex="-1">
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title" style="margin-top: -60px;">
+          <header class="modal__header">
+            <h2 class="modal__title" id="modal-title-cow"></h2>
+            <button style="cursor: pointer" class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+          </header>
+          <label id="query-cow" style="color: red;font-weight:bold;">No existen datos!</label>
+          <main class="modal__content" id="modal-1-content">
+            <div>
+         
+              <div class="form-item small">
+                <label class="form-label" for="Names">Nombre común : </label>
+                <input type="text" style="font-weight: bold;text-transform: uppercase;"class="small" id="common-name" />
+              </div>
+
+              <div class="form-item small">
+                <label class="form-label" for="Names">Especie : </label>
+                <input type="text" style="font-weight: bold;text-transform: uppercase;"class="small" id="species" />
+              </div>
+
+              <div class="form-item small">
+                <label class="form-label" for="Names">Raza/Linaje : </label>
+                <input type="text" style="font-weight: bold;text-transform: uppercase;"class="small" id="race" />
+              </div>
+
+              <div class="form-item small">
+                <label class="form-label" for="Names">Edad : </label>
+                <input type="tel" maxlength="3" class="small" id="age" />
+              </div>
+
+              <div class="form-item small">
+                <label class="form-label" for="Names">Fecha de nacimiento : </label>
+                <input type="date" style="font-weight: bold;text-transform: uppercase;"class="small" id="birth-cow" />
+              </div>
+
+              <div class="form-item small">
+                <label class="form-label" for="Names">Peso kg : </label>
+                <input type="number" class="small" id="weight-cow" />
+              </div>
+
+              <div class="form-item small">
+                <label class="form-label" for="Names">Estado fisiológico : </label>
+                <input type="text" style="font-weight: bold;text-transform: uppercase;"class="small" id="status-cow" />
+              </div>
+              
+              <div class="form-item small">
+                <label class="form-label" for="Names">Origen : </label>
+                <input type="text" style="font-weight: bold;text-transform: uppercase;"class="small" id="origin-cow" />
+              </div>
+
+              
+              <div class="form-item small">
+                <label class="form-label" for="Names">Detalles : </label>
+                <input type="text" style="font-weight: bold;text-transform: uppercase;"class="small" id="detail-cow" />
+              </div>
+          
+              </div>
+             
+          </main>
+          <center><label id="registering" style="display: none;">Registrando datos....</label></center>
+          <footer class="modal__footer" style="display: flex; justify-content: space-around" id="footer-data-cow">
+            <!--
+              <button class="modal__btn modal__btn-primary" style="background: #014581;color: #fff;">Guardar</button>
+              <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
+              Cancelar
+              </button>
+            -->
           </footer>
         </div>
       </div>

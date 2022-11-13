@@ -19,6 +19,8 @@
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
   <script src="/main.js"></script>
   <script src="../../../modal/micromodal.js"></script>
+  <script src="../js/tableJS/jspdf.min.js"></script>
+  <script src="../js/tableJS/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body>
@@ -30,6 +32,11 @@
             style="display: flex; align-items: center; justify-content: center; height: 35px; font-size: 18px;">
             <ion-icon name="person-add" style="color: #fff;"></ion-icon>
           </button>
+          &nbsp;
+          <button class="btnOptionConfig" id="btn-print" onclick="printUsers()"
+          style="display: none;">
+          <ion-icon name="print" style="color: #fff;"></ion-icon>
+        </button>
         </div>
         <div id="topdiv">
           <input id="topsearch" type="text" placeholder="Buscar">

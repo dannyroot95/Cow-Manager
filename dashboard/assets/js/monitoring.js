@@ -26,11 +26,9 @@ showCows()
 
 function showCows(){
 
-
         window.onload = function () {
             LoadMap();
         }
-
 
         function LoadMap() {
 
@@ -123,15 +121,15 @@ function showCows(){
                             var num_cow = str.split("cow")
                             //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
                             infoWindow.setContent(
-                                '<div style = "width:200px;min-height:15px">' 
+                                '<div style = "width:250px;min-height:15px">' 
                                 +'<label>'+'<strong>Vaca N°'+num_cow[1]+'</strong>'+'</label>'
                                 +'</div>'+
-                                '<div style = "width:200px;min-height:15px">' 
+                                '<div style = "width:250px;min-height:15px">' 
                                 +'<label><strong>Fecha : </strong>'+onlyDateNumber(data.description*1000)+" - "+onlyHour(data.description*1000)+'</label>'
                                 +'</div>'+
 
-                                '<div style = "width:200px;min-height:15px;margin-top:8px;">' 
-                                +'<center><button class="btnOptionConfig animate__animated animate__bounceIn" style="font-size:10px;" onclick="reportCow('+"'"+data.gender+","+data.title+","+data.lat+","+data.lng+"'"+')">Reportar</button></center>'
+                                '<div style = "width:250px;min-height:15px;margin-top:8px;">' 
+                                +'<center><button class="btnOptionConfig animate__animated animate__bounceIn" style="font-size:10px;" onclick="reportCow('+"'"+data.gender+","+data.title+","+data.lat+","+data.lng+"'"+')">Reportar</button>  <button class="btnOption animate__animated animate__bounceIn" onclick="showDataCow('+num_cow[1]+')" style="font-size:10px;">Ver datos</button></center>'
                                 +'</div>'
                                 );
                             infoWindow.open(map, marker);
@@ -271,4 +269,68 @@ function onlyDateNumber(UNIX_timestamp){
     var time = stringhour + ':' + stringmin ;
 
     return time;
+  }
+
+  function showDataCow(idCow){
+    document.getElementById("common-name").value = ""
+    document.getElementById("species").value = ""
+    document.getElementById("race").value = ""
+    document.getElementById("age").value = ""
+    document.getElementById("birth-cow").value = ""
+    document.getElementById("weight-cow").value = ""
+    document.getElementById("status-cow").value = ""
+    document.getElementById("origin-cow").value = ""
+    document.getElementById("detail-cow").value = ""
+    document.getElementById("footer-data-cow").innerHTML = ""
+    var ctx = 0
+    var cow 
+    MicroModal.show("modal-data-cow")
+    document.getElementById("modal-title-cow").innerHTML = "Datos de vaca #"+idCow
+
+    document.getElementById("query-cow").innerHTML = "Buscando datos..."
+    document.getElementById("query-cow").style = "font-weight:bold;" 
+
+    db2.collection("info_cow").where("cow","==",idCow).get().then((query)=>{
+
+        query.forEach((data)=>{
+
+            if(data.data().cow == idCow){
+                ctx++
+                cow = data.data()
+            }
+
+        })
+
+        if(ctx == 0){
+            document.getElementById("query-cow").innerHTML = "No existen datos!"
+            document.getElementById("query-cow").style = "color: red;font-weight:bold;" 
+            document.getElementById("footer-data-cow").innerHTML = `<button class="modal__btn modal__btn-primary" style="background: #fc0000;color: #fff;">Guardar datos</button>
+            <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
+            Cancelar
+            </button>`
+        }else{
+            document.getElementById("query-cow").innerHTML = ""
+            document.getElementById("query-cow").style = "display:none;"
+
+            document.getElementById("common-name").value = cow.common_name
+            document.getElementById("species").value = cow.specie
+            document.getElementById("race").value = cow.race
+            document.getElementById("age").value = cow.age
+            document.getElementById("birth-cow").value = "12/12/2022"
+            document.getElementById("weight-cow").value = cow.weight
+            document.getElementById("status-cow").value = cow.status
+            document.getElementById("origin-cow").value = cow.origin
+            document.getElementById("detail-cow").value = cow.details
+
+            document.getElementById("footer-data-cow").innerHTML = `<button class="modal__btn modal__btn-primary" style="background: #145A32;color: #fff;">Editar datos</button>
+            <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
+            Cancelar
+            </button>`
+        }
+
+    }).catch((error) => {
+        document.getElementById("query-cow").innerHTML = "No existen datos!"
+        document.getElementById("query-cow").style = "color: red;font-weight:bold;" 
+    });
+
   }

@@ -10,6 +10,7 @@ var edit_type_user = "";
 var filterText = "";
 var filterType = 0;
 MicroModal.init();
+var arrayUsers = []
 
 $("#filters").on("change", function () {
   filterType = $(this).val();
@@ -109,18 +110,26 @@ db.collection("users").onSnapshot((snapshot) => {
     ...doc.data(),
   }));
  
+  var ctx = 0
+
   $("#tbody").html(
     users
       .map((user) => {
         var type = "";
+        var ty = ""
+        ctx++
         if (user.type == "super_admin") {
           type = `Super Administrador <ion-icon name="people-circle-outline">`;
+          ty = 'Super Administrador'
         } else if (user.type == "operator") {
           type = `Operador <ion-icon name="build-outline">`;
+          ty = 'Operador'
         }
         else if (user.type == "admin") {
           type = `Administrador <ion-icon name="person-outline">`;
+          ty = 'Administrador'
         }
+        arrayUsers.push([ctx,user.name,ty,user.dni,user.phone,user.email])
         $("#usersSpinner").hide();
         return `
           <tr>
@@ -149,6 +158,7 @@ db.collection("users").onSnapshot((snapshot) => {
       })
       .join("")
   );
+  document.getElementById("btn-print").style = 'display: flex; align-items: center; justify-content: center; height: 35px; font-size: 18px;'
 });
 
 function setData(dni, name, phone, id, type) {
@@ -504,4 +514,47 @@ function doCORSRequest(options, printResult) {
     x.setRequestHeader("Content-Type", "application/json");
   }
   x.send(options.data);
+}
+
+function onlyDateNumber(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp);
+  var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+
+    if(date <=9){
+      date = "0"+date
+    }
+  var time = date + '/' + month + '/' + year;
+  return time;
+}
+
+function printUsers(){
+
+  
+  var doc = new jspdf.jsPDF()
+  doc.setFontSize(26)
+  doc.text(30, 16, "Cow Manager")
+  doc.setFontSize(9)
+  doc.text(30, 22, "Lista de usuarios : "+onlyDateNumber(Date.now()))
+  doc.setFontSize(9)
+  doc.text(155, 14, "RUC : "+"121212121212")
+  doc.text(155, 19, "Direccion : "+"Jr.Los girasoles Mz6 L9")
+  doc.text(155, 24, "Teléfono : "+"+51989280394")
+  doc.setFontSize(12)
+  doc.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
+    doc.autoTable({
+    head: [['#','Apellidos y Nombres','Tipo de usuario','DNI','Teléfono','Correo']],
+    body: arrayUsers,
+    theme: 'grid',
+    styles : { halign : 'center'},
+   headStyles :{fillColor : [0, 142, 138]}, 
+   alternateRowStyles: {fillColor : [238, 255, 254]}, 
+   tableLineColor: [0, 142, 138], 
+   tableLineWidth: 0.1,
+   margin: {top: 32},
+    })
+    doc.save('Lista de usuarios_'+onlyDateNumber(Date.now())+'.pdf')
+
 }
