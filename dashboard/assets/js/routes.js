@@ -9,8 +9,10 @@ var firebaseConfig = {
   };
   
   firebase.initializeApp(firebaseConfig);
-  let db = firebase.database();
-  let currentCow = ""
+  let db = firebase.database()
+  let db2 = firebase.firestore()
+  let currentCow 
+  let currentCowData 
   picker()
 
   document.addEventListener("DOMContentLoaded", (_) => {
@@ -66,22 +68,36 @@ var firebaseConfig = {
 
       });
 
+      document.getElementById("loading").style = "display:none;"
+      document.getElementById("cows").style = "position:relative;top:-30px;left: -360px;"
+
   })
 
   function searchRoutes(cow){
 
     var points = []
+    var ctx = 0
 
     db.ref('cows/'+cow).once('value', (snapshot) => {
 
         snapshot.forEach(document =>{
 
             if(document.key != "location"){
+              ctx++
                 var location = document.val()
+                currentCowData = location
                 points.push({lat:location.latitude,lng:location.longitude,time:location.time})
             }
 
         })
+
+        if(ctx == 0){
+          Swal.fire(
+            'Oopss!',
+            'No existen datos!',
+            'warning'
+          )
+        }
 
         console.log(points)
         showRoutes(points)
@@ -317,6 +333,102 @@ html2canvas(document.querySelector("#routes-map")).then(canvas => {
   pdf.save('ruta '+cow+'.pdf')
 
 });
+
+
+}
+
+function reportCow(){
+  var select = document.getElementById('cows');
+  var value = select.options[select.selectedIndex].text;
+  MicroModal.show("modal-report")
+  document.getElementById("modal-title").innerHTML = "Reportar "+value
+
+  if(currentCowData.gender == "female"){
+      document.getElementById("gender").innerHTML = "Hembra"
+      document.getElementById("gender").style = "font-weight:bold;color:#FA276A;"
+      document.getElementById("img-gender").src = "../imgs/icon-cow.png"
+  }else{
+      document.getElementById("gender").innerHTML = "Macho"
+      document.getElementById("gender").style = "font-weight:bold;color:#0262AD;"
+      document.getElementById("img-gender").src = "../imgs/icon-cow-male.png"
+  }
+
+  document.getElementById("latitude").innerHTML = currentCowData.latitude
+  document.getElementById("longitude").innerHTML = currentCowData.longitude
+  document.getElementById("date").innerHTML = onlyDateNumber(Date.now())+" - "+onlyHour(Date.now())
+
+
+}
+
+function registerIncident(){
+
+  var select = document.getElementById('signs');
+  var sign = select.options[select.selectedIndex].text;
+
+  var user = JSON.parse(localStorage.getItem("user"))
+  var splitter = (document.getElementById("modal-title").innerHTML).split("N°")
+  var cow = splitter[1]
+  var description = document.getElementById("description").value
+  var gender = document.getElementById("gender").innerHTML
+  var latitude = document.getElementById("latitude").innerHTML
+  var longitude = document.getElementById("longitude").innerHTML
+
+  if(description != ""){
+
+      document.getElementById("add").style = "display:none;"
+      document.getElementById("registering").style = "display:block;"
+
+      if(gender == "Hembra"){
+          gender = "female"
+      }else{
+          gender = "male"
+      }
+
+      var obj = {
+          cow : cow,
+          date : Date.now(),
+          description : description,
+          gender : gender,
+          lat : parseFloat(latitude),
+          lng : parseFloat(longitude),
+          signs : sign,
+          user : user.name
+      }
+
+      db2.collection("incidents").add(obj).then(response =>{
+
+          document.getElementById("registering").style = "display:none;"
+          document.getElementById("description").value = ""
+          MicroModal.close("modal-report")
+          document.getElementById("add").style = "display: flex; justify-content: space-around;"
+
+          const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+            })
+            
+            Toast.fire({
+              icon: 'success',
+              title: 'Incidente registrado!'
+            })
+         
+
+      })
+
+  }else{
+    Swal.fire(
+      'Oopss!',
+      'Agregue una descripción!',
+      'warning'
+    )
+  }
 
 
 }

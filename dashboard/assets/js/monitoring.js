@@ -25,6 +25,7 @@ var sign = "Apetito"
 
 showCows()
 infoCows()
+//dataCows()
 
 function showCows(){
 
@@ -139,11 +140,36 @@ function showCows(){
                     })(marker, data);
                 }
 
+                document.getElementById("cows").innerHTML = ""
+                dataCows()  
+
             });
         }    
 }
 
 
+function dataCows(){
+    db.ref('cows').once('value', (snapshot) => {
+        var ctx = 0
+        var op = '<option value="0" style="display: none;">Seleccione.....</option>'
+        $(op).appendTo('#cows');
+        snapshot.forEach(document =>{
+          ctx++
+          var result = document.key
+          var cow = result.split("cow")
+          var area = '<option value="'+ctx+'">Vaca N°'+cow[1]+'</option>'
+          $(area).appendTo('#cows');
+        })
+    
+        $("#cows").on("change", function () {
+            var select = document.getElementById('cows');
+            var value = select.options[select.selectedIndex].text;    
+          });
+    
+          document.getElementById("loading").style = "display:none;"
+          document.getElementById("cows").style = "display:block;width:100%;"
+      })
+}
 
 function reportCow(data){
 
@@ -229,6 +255,12 @@ function registerIncident(){
 
         })
 
+    }else{
+        Swal.fire(
+            'Oopss!',
+            'Agregue una descripción!',
+            'warning'
+          )
     }
 
 
@@ -486,4 +518,57 @@ function printData(){
       })
       doc.save('Informacion de animales_'+onlyDateNumber(Date.now())+'.pdf')
   
+    }
+
+    function showModalDeleteNode(){
+        MicroModal.show("modal-delete-node")
+    }
+
+    function deleteNode(){
+
+        var select = document.getElementById('cows');
+        var selectValue = select.options[select.selectedIndex].text;
+        var cow = selectValue.split("Vaca N°")[1]
+
+        db.ref('cows/cow'+cow).remove()
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Nodo eliminado!'
+          })
+
+          MicroModal.close("modal-delete-node")
+          document.getElementById("cows").innerHTML = ""
+          dataCows()  
+       
+    }
+
+    function alertDelete(){
+
+        var select = document.getElementById('cows');
+        var selectValue = select.options[select.selectedIndex].text;
+
+        if(selectValue != "Seleccione....."){
+            Swal.fire({
+                title: 'Esta seguro de eliminar este nodo?',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'No',
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  Swal.fire('Eliminado!', '', 'success')
+                  deleteNode()
+                } 
+              })
+        }else{
+            Swal.fire(
+                'Hey!',
+                'Seleccione un nodo!',
+                'error'
+              )
+        }
+
+       
+
     }

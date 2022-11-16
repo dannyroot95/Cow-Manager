@@ -7,6 +7,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" charset="utf-8"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../css/style.css" type="text/css" media="all" />
@@ -51,7 +52,8 @@
         <label style="position:relative;top:-75px;">
             <ion-icon name="location" size="large"></ion-icon>
             Seleccione una Vaca y genere una ruta en el mapa</label>
-        <select class="btnOption" id="cows" style="position:relative;top:-30px;left: -360px;">
+            <label id="loading" style="font-weight: bold;">OBTENIENDO DATOS, ESPERE...</label>
+        <select class="btnOption" id="cows" style="display: none;">
             <option value="0" style="display: none;">Seleccione.....</option>
         </select>
     </div>
@@ -72,14 +74,73 @@
                 <input type="month" id="datePerMonth" style="display: none;">
 
             <button class="modal__btn modal__btn-primary" onclick="printRoute()" style="background: #464646;color: #fff;margin-left: 22px;">Imprimir ruta</button>&nbsp;
-            <button class="modal__btn modal__btn-primary" style="background: #89315a;color: #fff;">Reportar</button>
+            <button class="modal__btn modal__btn-primary" onclick="reportCow()" style="background: #89315a;color: #fff;">Reportar</button>
 
         </div>
     </center>
 
     <div style="padding: 12px;" id="routes-map"></div><br>
 
-    
+    <div class="modal micromodal-slide" id="modal-report" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1">
+          <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title" style="margin-top: -60px;">
+            <header class="modal__header">
+              <h2 class="modal__title" id="modal-title"></h2>
+              <button style="cursor: pointer" class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+            </header>
+            <main class="modal__content" id="modal-1-content">
+              <div>
+                <div class="form-item">
+                  <label class="form-label small" for="Phone">Género : </label>
+                  <img id="img-gender" width="80px" height="80px">
+                  <label id="gender"></label>
+                </div>
+  
+                <div class="form-item small">
+                  <label class="form-label small" for="Phone">Signos : </label>
+                  <select class="btnOption" style="font-size: 14px;" id="signs">
+                    <option value="0" style="font-size: 14px;">MASTITIS</option>
+                    <option value="1" style="font-size: 14px;">BABESIOSIS</option>
+                    <option value="2" style="font-size: 14px;">BRUCELOSIS</option>
+                    <option value="3" style="font-size: 14px;">FIEBRE AFTOSA</option>
+                    <option value="4" style="font-size: 14px;">TUBERCULOSIS</option>
+                    <option value="5" style="font-size: 14px;">CLOSTRIDIOSIS</option>
+                    <option value="6" style="font-size: 14px;">LEPTOSPIROSIS</option>
+                    <option value="7" style="font-size: 14px;">PROBLEMAS EN LAS PEZUÑAS</option>
+                    <option value="8" style="font-size: 14px;">PARÁSITOS</option>
+                  </select>
+                </div>
+               
+                <div class="form-item small">
+                  <label class="form-label" for="Names">Descripcion</label>
+                  <textarea class="small" style="width: 250px;" type="textarea" name="Names"
+                    value="" id="description"></textarea>
+                </div>
+                <div class="form-item small">
+                  <label class="form-label" for="Phone">Latitud : </label>
+                  <label id="latitude"></label>
+                </div>
+                <div class="form-item small">
+                  <label class="form-label" for="Phone">Longitud : </label>
+                  <label id="longitude"></label>
+                </div>
+                <div class="form-item small">
+                  <label class="form-label" for="Phone">Fecha y Hora : </label>
+                  <label id="date"></label>
+                </div>
+               
+                
+            </main>
+            <center><label id="registering" style="display: none;">Registrando incidente....</label></center>
+            <footer class="modal__footer" style="display: flex; justify-content: space-around" id="add">
+              <button class="modal__btn modal__btn-primary" style="background: #014581;color: #fff;" onclick="registerIncident()">Reportar</button>
+              <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">
+                Cancelar
+              </button>
+            </footer>
+          </div>
+        </div>
+      </div>
  
     <style>
          span.easepick-wrapper{
