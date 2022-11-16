@@ -30,8 +30,16 @@ var firebaseConfig = {
         $("#tbody").html(
             incidents
               .map((file) => {
+
+                var gender = file.gender
+                if(gender == "male"){
+                  gender = "MACHO"
+                }else{
+                  gender = "HEMBRA"
+                }
+
                 ctx++
-                arrayInc.push([ctx,onlyDateNumber(file.date),onlyHour(file.date),file.cow,file.user,file.signs,file.description])
+                arrayInc.push([ctx,onlyDateNumber(file.date),onlyHour(file.date),file.cow,file.user,file.signs,gender])
                 $("#cowsSpinner").hide();
                 return `
                   <tr>
@@ -144,6 +152,16 @@ var firebaseConfig = {
   
   function printData(){
 
+    Swal.fire({
+      title: 'En breves se descargará el archivo!',
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading()
+      },
+    })
+    
+
     var doc = new jspdf.jsPDF()
     doc.setFontSize(26)
     doc.text(30, 16, "Cow Manager")
@@ -156,7 +174,7 @@ var firebaseConfig = {
 	  doc.setFontSize(12)
 	  doc.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
       doc.autoTable({
-      head: [['#','Fecha de incidente','Hora','ID Vaca','Reportado por','Signos','Detalles']],
+      head: [['#','Fecha de incidente','Hora','ID Vaca','Reportado por','Signos','Género']],
       body: arrayInc,
       theme: 'grid',
       styles : { halign : 'center'},

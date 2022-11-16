@@ -452,6 +452,16 @@ function infoCows(){
 
 function printData(){
 
+    Swal.fire({
+        title: 'En breves se descargará el archivo!',
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      })
+      
+
     var doc = new jspdf.jsPDF()
     doc.setFontSize(26)
     doc.text(30, 16, "Cow Manager")

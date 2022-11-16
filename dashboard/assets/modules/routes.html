@@ -23,9 +23,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@easepick/core@1.2.0/dist/index.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@easepick/base-plugin@1.2.0/dist/index.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@easepick/range-plugin@1.2.0/dist/index.umd.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="../js/tableJS/jspdf.min.js"></script>
+    <script src="../js/tableJS/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!------->
-
-    
     <style>
         html,body{
             background-color: white;
@@ -35,7 +37,7 @@
                   max-width: 1200px;
                   width: 100%;
                   max-height: 1200px;
-                  height: 300px;
+                  height: 400px;
                   margin: 0px;
                 }
     </style>
@@ -54,8 +56,6 @@
         </select>
     </div>
 
-    <div style="padding: 12px;" id="routes-map"></div><br>
-
     <center>
         <div id="div-filters" style="display: none;">
             <label>Filtrar por : </label>&nbsp;
@@ -71,11 +71,15 @@
                 <input id="datePerRange" style="display: none;" placeholder="seleccione las fechas..."/>
                 <input type="month" id="datePerMonth" style="display: none;">
 
-            <button class="modal__btn modal__btn-primary" style="background: #464646;color: #fff;margin-left: 22px;">Imprimir ruta</button>&nbsp;
+            <button class="modal__btn modal__btn-primary" onclick="printRoute()" style="background: #464646;color: #fff;margin-left: 22px;">Imprimir ruta</button>&nbsp;
             <button class="modal__btn modal__btn-primary" style="background: #89315a;color: #fff;">Reportar</button>
 
         </div>
     </center>
+
+    <div style="padding: 12px;" id="routes-map"></div><br>
+
+    
  
     <style>
          span.easepick-wrapper{

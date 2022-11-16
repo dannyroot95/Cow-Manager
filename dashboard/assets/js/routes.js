@@ -155,7 +155,7 @@ var firebaseConfig = {
   });
 
   flightPath.setMap(map);
-  document.getElementById("div-filters").style = "display:block;"
+  document.getElementById("div-filters").style = "display:block;margin-bottom:20px;"
 
 }
 
@@ -279,4 +279,44 @@ function picker(){
                    showCustomRoutes(toTimestamp(startDate)/1000,toTimestamp(endDate)/1000)
               })}
           });
+}
+
+
+
+function printRoute() {
+
+Swal.fire({
+  title: 'En breves se descargará el archivo!',
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+  },
+})
+
+
+var cow = $("#cows option:selected").text()
+
+html2canvas(document.querySelector("#routes-map")).then(canvas => {
+  //document.body.appendChild(canvas)
+  var pdf = new jspdf.jsPDF()
+
+  pdf.setFontSize(26)
+  pdf.text(30, 16, "Cow Manager")
+  pdf.setFontSize(9)
+  pdf.text(30, 22, "Ruta : "+cow)
+  pdf.text(30, 26, "Fecha : "+onlyDateNumber(Date.now()))
+  pdf.setFontSize(9)
+  pdf.text(155, 14, "RUC : "+"121212121212")
+  pdf.text(155, 19, "Direccion : "+"Jr.Los girasoles Mz6 L9")
+  pdf.text(155, 24, "Teléfono : "+"+51989280394")
+  pdf.setFontSize(12)
+  pdf.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
+
+  pdf.addImage(canvas, 'JPEG', 7, 32, 195, 90);
+  pdf.save('ruta '+cow+'.pdf')
+
+});
+
+
 }

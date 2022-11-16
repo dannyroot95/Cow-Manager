@@ -532,6 +532,15 @@ function onlyDateNumber(UNIX_timestamp){
 
 function printUsers(){
 
+  Swal.fire({
+    title: 'En breves se descargará el archivo!',
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading()
+    },
+  })
+  
   
   var doc = new jspdf.jsPDF()
   doc.setFontSize(26)

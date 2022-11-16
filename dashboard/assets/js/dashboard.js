@@ -78,9 +78,9 @@ function getDataFS(){
 
   let date = new Date()
 
-  let eyes = 0 , skin = 0 , mov = 0 , hungry = 0
+  let eyes = 0 , skin = 0 , mov = 0 , hungry = 0 , tuber = 0 , clos = 0 , lep = 0 , pr = 0 , ps = 0
 
-  let diseases = ["Ojos y ojeras","Piel","Postura y movimiento","Apetito"]
+  let diseases = ["MASTITIS","BABESIOSIS","BRUCELOSIS","FIEBRE AFTOSA","TUBERCULOSIS","CLOSTRIDIOSIS","LEPTOSPIROSIS","PROBLEMAS EN LAS PEZUÑAS","PARÁSITOS"]
   let data = [] , dates = []
 
   let eyeJan = 0 , eyeFeb = 0 , eyeMar = 0 , eyeApr = 0 , eyeMay = 0 , eyeJun = 0 , eyeJul = 0 , eyeAgu = 0 , eyeSep = 0 , eyeOct = 0 , eyeNov = 0 , eyeDec = 0 
@@ -90,6 +90,16 @@ function getDataFS(){
   let movJan = 0 , movFeb = 0 , movMar = 0 , movApr = 0 , movMay = 0 , movJun = 0 , movJul = 0 , movAgu = 0 , movSep = 0 , movOct = 0 , movNov = 0 , movDec = 0 
 
   let hungryJan = 0 , hungryFeb = 0 , hungryMar = 0 , hungryApr = 0 , hungryMay = 0 , hungryJun = 0 , hungryJul = 0 , hungryAgu = 0 , hungrySep = 0 , hungryOct = 0 , hungryNov = 0 , hungryDec = 0 
+
+  let tuberJan = 0 , tuberFeb = 0 , tuberMar = 0 , tuberApr = 0 , tuberMay = 0 , tuberJun = 0 , tuberJul = 0 , tuberAgu = 0 , tuberSep = 0 , tuberOct = 0 , tuberNov = 0 , tuberDec = 0 
+
+  let closJan = 0 , closFeb = 0 , closMar = 0 , closApr = 0 , closMay = 0 , closJun = 0 , closJul = 0 , closAgu = 0 , closSep = 0 , closOct = 0 , closNov = 0 , closDec = 0 
+
+  let lepJan = 0 , lepFeb = 0 , lepMar = 0 , lepApr = 0 , lepMay = 0 , lepJun = 0 , lepJul = 0 , lepAgu = 0 , lepSep = 0 , lepOct = 0 , lepNov = 0 , lepDec = 0 
+  
+  let prJan = 0 , prFeb = 0 , prMar = 0 , prApr = 0 , prMay = 0 , prJun = 0 , prJul = 0 , prAgu = 0 , prSep = 0 , prOct = 0 , prNov = 0 , prDec = 0 
+
+  let psJan = 0 , psFeb = 0 , psMar = 0 , psApr = 0 , psMay = 0 , psJun = 0 , psJul = 0 , psAgu = 0 , psSep = 0 , psOct = 0 , psNov = 0 , psDec = 0 
 
   let januaryX = [toTimestamp(date.getFullYear()+"/01/"+getFirstAndLastDayByMonth(0).firstDay),
   toTimestamp(date.getFullYear()+"/01/"+getFirstAndLastDayByMonth(0).lastDay+" "+"23:59:59")]
@@ -127,7 +137,7 @@ function getDataFS(){
   let decemberX = [toTimestamp(date.getFullYear()+"/12/"+getFirstAndLastDayByMonth(11).firstDay),
   toTimestamp(date.getFullYear()+"/12/"+getFirstAndLastDayByMonth(11).lastDay+" "+"23:59:59")]
 
-  let eyesX = [] , skinX  = [] , movX = [] , hungryX = []
+  let eyesX = [] , skinX  = [] , movX = [] , hungryX = [] , tuberX = [] , closX = [] , lepX = [] , prX = [] , psX = []
 
   fs.collection("area").get().then(snapshot =>{
 
@@ -267,6 +277,152 @@ function getDataFS(){
           hungryDec++
         }
 
+      }else if(element.data().signs == diseases[4]){
+        tuber++
+
+        
+        if(element.data().date > januaryX[0] && element.data().date < januaryX[1]){
+          tuberJan++
+        }else if (element.data().date > februaryX[0] && element.data().date < februaryX[1]){
+          tuberFeb++
+        }else if (element.data().date > marchX[0] && element.data().date < marchX[1]){
+          tuberMar++
+        }else if (element.data().date > aprilX[0] && element.data().date < aprilX[1]){
+          tuberApr++
+        }else if (element.data().date > mayX[0] && element.data().date < mayX[1]){
+          tuberMay++
+        }else if (element.data().date > juneX[0] && element.data().date < juneX[1]){
+          tuberJun++
+        }else if (element.data().date > julyX[0] && element.data().date < julyX[1]){
+          tuberJul++
+        }else if (element.data().date > augustX[0] && element.data().date < augustX[1]){
+          tuberAgu++
+        }else if (element.data().date > septemberX[0] && element.data().date < septemberX[1]){
+          tuberSep++
+        }else if (element.data().date > octoberX[0] && element.data().date < octoberX[1]){
+          tuberOct++
+        }else if (element.data().date > novemberX[0] && element.data().date < novemberX[1]){
+          tuberNov++
+        }else if (element.data().date > decemberX[0] && element.data().date < decemberX[1]){
+          tuberDec++
+        }
+
+      }else if(element.data().signs == diseases[5]){
+        clos++
+
+        if(element.data().date > januaryX[0] && element.data().date < januaryX[1]){
+          closJan++
+        }else if (element.data().date > februaryX[0] && element.data().date < februaryX[1]){
+          closFeb++
+        }else if (element.data().date > marchX[0] && element.data().date < marchX[1]){
+          closMar++
+        }else if (element.data().date > aprilX[0] && element.data().date < aprilX[1]){
+          closApr++
+        }else if (element.data().date > mayX[0] && element.data().date < mayX[1]){
+          closMay++
+        }else if (element.data().date > juneX[0] && element.data().date < juneX[1]){
+          closJun++
+        }else if (element.data().date > julyX[0] && element.data().date < julyX[1]){
+          closJul++
+        }else if (element.data().date > augustX[0] && element.data().date < augustX[1]){
+          closAgu++
+        }else if (element.data().date > septemberX[0] && element.data().date < septemberX[1]){
+          closSep++
+        }else if (element.data().date > octoberX[0] && element.data().date < octoberX[1]){
+          closOct++
+        }else if (element.data().date > novemberX[0] && element.data().date < novemberX[1]){
+          closNov++
+        }else if (element.data().date > decemberX[0] && element.data().date < decemberX[1]){
+          closDec++
+        }
+
+      }else if(element.data().signs == diseases[6]){
+        lep++
+
+        if(element.data().date > januaryX[0] && element.data().date < januaryX[1]){
+          lepJan++
+        }else if (element.data().date > februaryX[0] && element.data().date < februaryX[1]){
+          lepFeb++
+        }else if (element.data().date > marchX[0] && element.data().date < marchX[1]){
+          lepMar++
+        }else if (element.data().date > aprilX[0] && element.data().date < aprilX[1]){
+          lepApr++
+        }else if (element.data().date > mayX[0] && element.data().date < mayX[1]){
+          lepMay++
+        }else if (element.data().date > juneX[0] && element.data().date < juneX[1]){
+          lepJun++
+        }else if (element.data().date > julyX[0] && element.data().date < julyX[1]){
+          lepJul++
+        }else if (element.data().date > augustX[0] && element.data().date < augustX[1]){
+          lepAgu++
+        }else if (element.data().date > septemberX[0] && element.data().date < septemberX[1]){
+          lepSep++
+        }else if (element.data().date > octoberX[0] && element.data().date < octoberX[1]){
+          lepOct++
+        }else if (element.data().date > novemberX[0] && element.data().date < novemberX[1]){
+          lepNov++
+        }else if (element.data().date > decemberX[0] && element.data().date < decemberX[1]){
+          lepDec++
+        }
+
+      }else if(element.data().signs == diseases[7]){
+        pr++
+
+        if(element.data().date > januaryX[0] && element.data().date < januaryX[1]){
+          prJan++
+        }else if (element.data().date > februaryX[0] && element.data().date < februaryX[1]){
+          prFeb++
+        }else if (element.data().date > marchX[0] && element.data().date < marchX[1]){
+          prMar++
+        }else if (element.data().date > aprilX[0] && element.data().date < aprilX[1]){
+          prApr++
+        }else if (element.data().date > mayX[0] && element.data().date < mayX[1]){
+          prMay++
+        }else if (element.data().date > juneX[0] && element.data().date < juneX[1]){
+          prJun++
+        }else if (element.data().date > julyX[0] && element.data().date < julyX[1]){
+          prJul++
+        }else if (element.data().date > augustX[0] && element.data().date < augustX[1]){
+          prAgu++
+        }else if (element.data().date > septemberX[0] && element.data().date < septemberX[1]){
+          prSep++
+        }else if (element.data().date > octoberX[0] && element.data().date < octoberX[1]){
+          prOct++
+        }else if (element.data().date > novemberX[0] && element.data().date < novemberX[1]){
+          prNov++
+        }else if (element.data().date > decemberX[0] && element.data().date < decemberX[1]){
+          prDec++
+        }
+
+      }else if(element.data().signs == diseases[8]){
+        ps++
+
+        if(element.data().date > januaryX[0] && element.data().date < januaryX[1]){
+          psJan++
+        }else if (element.data().date > februaryX[0] && element.data().date < februaryX[1]){
+          psFeb++
+        }else if (element.data().date > marchX[0] && element.data().date < marchX[1]){
+          psMar++
+        }else if (element.data().date > aprilX[0] && element.data().date < aprilX[1]){
+          psApr++
+        }else if (element.data().date > mayX[0] && element.data().date < mayX[1]){
+          psMay++
+        }else if (element.data().date > juneX[0] && element.data().date < juneX[1]){
+          psJun++
+        }else if (element.data().date > julyX[0] && element.data().date < julyX[1]){
+          psJul++
+        }else if (element.data().date > augustX[0] && element.data().date < augustX[1]){
+          psAgu++
+        }else if (element.data().date > septemberX[0] && element.data().date < septemberX[1]){
+          psSep++
+        }else if (element.data().date > octoberX[0] && element.data().date < octoberX[1]){
+          psOct++
+        }else if (element.data().date > novemberX[0] && element.data().date < novemberX[1]){
+          psNov++
+        }else if (element.data().date > decemberX[0] && element.data().date < decemberX[1]){
+          psDec++
+        }
+
       }
 
       dates.push(element.data().date)
@@ -278,16 +434,19 @@ function getDataFS(){
     skinX = [skinJan,skinFeb,skinMar,skinApr,skinMay,skinJun,skinJul,skinAgu,skinSep,skinOct,skinNov,skinDec]
     movX = [movJan,movFeb,movMar,movApr,movMay,movJun,movJul,movAgu,movSep,movOct,movNov,movDec]
     hungryX = [hungryJan,hungryFeb,hungryMar,hungryApr,hungryMay,hungryJun,hungryJul,hungryAgu,hungrySep,hungryOct,hungryNov,hungryDec]
-
-    console.log(movX)
-
-    data = [eyes,skin,mov,hungry]
+    tuberX = [tuberJan,tuberFeb,tuberMar,tuberApr,tuberMay,tuberJun,tuberJul,tuberAgu,tuberSep,tuberOct,tuberNov,tuberDec]
+    closX = [closJan,closFeb,closMar,closApr,closMay,closJun,closJul,closAgu,closSep,closOct,closNov,closDec]
+    lepX = [lepJan,lepFeb,lepMar,lepApr,lepMay,lepJun,lepJul,lepAgu,lepSep,lepOct,lepNov,lepDec]
+    prX = [prJan,prFeb,prMar,prApr,prMay,prJun,prJul,prAgu,prSep,prOct,prNov,prDec]
+    psX = [psJan,psFeb,psMar,psApr,psMay,psJun,psJul,psAgu,psSep,psOct,psNov,psDec]
+   
+    data = [eyes,skin,mov,hungry,tuber,clos,lep,pr,ps]
   
     var min = Math.min(...dates) 
     var max = Math.max(...dates) 
 
     radar(data,onlyDateNumber(min),onlyDateNumber(max))
-    details(eyesX,skinX,movX,hungryX)
+    details(eyesX,skinX,movX,hungryX,tuberX,closX,lepX,prX,psX)
 
     document.getElementById("numAreas").innerHTML = ctx
     document.getElementById("numReports").innerHTML = c
@@ -363,7 +522,7 @@ db.ref("cows").on('child_added',
 
 function radar(values,min,max){
 
-  let diseases = ["Ojos y ojeras","Piel","Postura y movimiento","Apetito"]
+  let diseases =  ["MASTITIS","BABESIOSIS","BRUCELOSIS","FIEBRE AFTOSA","TUBERCULOSIS","CLOSTRIDIOSIS","LEPTOSPIROSIS","PROBLEMAS EN LAS PEZUÑAS","PARÁSITOS"]
 
   let chartConfig = {
     gui: {
@@ -412,17 +571,18 @@ function radar(values,min,max){
           align: 'center',
           backgroundColor: '#FBFCFE',
           borderWidth: '0px',
+          padding: '15px',
           item: {
             cursor: 'pointer',
             fontColor: '#777',
-            fontSize: '12px',
+            fontSize: '5px',
             offsetX: '-6px',
           },
           marker: {
             type: 'circle',
             borderWidth: '0px',
             cursor: 'pointer',
-            size: 5,
+            size: 4,
           },
           mediaRules: [
             {
@@ -524,6 +684,56 @@ function radar(values,min,max){
               backgroundColor: '#5ddb00',
             },
           },
+          {
+            text: diseases[4],
+            values: [values[4]],
+            backgroundColor: '#D4AC0D',
+            lineColor: '#D4AC0D',
+            lineWidth: '1px',
+            marker: {
+              backgroundColor: '#D4AC0D',
+            },
+          },
+          {
+            text: diseases[5],
+            values: [values[5]],
+            backgroundColor: '#592BC4',
+            lineColor: '#592BC4',
+            lineWidth: '1px',
+            marker: {
+              backgroundColor: '#592BC4',
+            },
+          },
+          {
+            text: diseases[6],
+            values: [values[6]],
+            backgroundColor: '#C4492B',
+            lineColor: '#C4492B',
+            lineWidth: '1px',
+            marker: {
+              backgroundColor: '#C4492B',
+            },
+          },
+          {
+            text: diseases[7],
+            values: [values[7]],
+            backgroundColor: '#2BC4BB',
+            lineColor: '#2BC4BB',
+            lineWidth: '1px',
+            marker: {
+              backgroundColor: '#2BC4BB',
+            },
+          },
+          {
+            text: diseases[8],
+            values: [values[8]],
+            backgroundColor: '#E7009E',
+            lineColor: '#E7009E',
+            lineWidth: '1px',
+            marker: {
+              backgroundColor: '#E7009E',
+            },
+          },
         ],
         noData: {
           text: 'No Selection',
@@ -587,21 +797,30 @@ function toTimestamp(strDate){
  }
   
 
- function details(array1,array2,array3,array4){
+ function details(array1,array2,array3,array4,array5,array6,array7,array8,array9){
 
   let eyesMax = Math.max(... array1)
   let skinMax = Math.max(... array2)
   let movMax = Math.max(... array3)
   let hungryMax = Math.max(... array4)
+  let tuberMax = Math.max(... array5)
+  let closMax = Math.max(... array6)
+  let lepMax = Math.max(... array7)
+  let prMax = Math.max(... array8)
+  let psMax = Math.max(... array9)
 
-  
   let eyesMin = Math.min(... array1)
   let skinMin = Math.min(... array2)
   let movMin = Math.min(... array3)
   let hungryMin = Math.min(... array4)
-  let mins = [eyesMin,skinMin,movMin,hungryMin]
+  let tuberMin = Math.min(... array5)
+  let closMin = Math.min(... array6)
+  let lepMin = Math.min(... array7)
+  let prMin = Math.min(... array8)
+  let psMin = Math.min(... array9)
+  let mins = [eyesMin,skinMin,movMin,hungryMin,tuberMin,closMin,lepMin,prMin,psMin]
  
-  let maxValue = eyesMax+skinMax+movMax+hungryMax
+  let maxValue = eyesMax+skinMax+movMax+hungryMax+tuberMax+closMax+lepMax+prMax+psMax
   let minValue = Math.min(... mins)
 
 
@@ -609,27 +828,17 @@ function toTimestamp(strDate){
     type: 'area',
     theme: 'classic',
     backgroundColor: '#fff',
-    title: {
-      text: 'Analisis comparativo - 2022',
-      backgroundColor: 'none',
-      fontFamily: 'Lato',
-      fontColor: '#000',
-      fontSize: '20px',
-      fontWeight: 'normal',
-      textAlign: 'left',
-    },
+
     legend: {
       align: 'center',
       backgroundColor: '#145A32',
       borderColor: '#808080',
       fontFamily: 'Lato',
-      fontSize: '10px',
       item: {
         fontColor: '#ffffff',
         markerStyle: 'match',
       },
       layout: 'float',
-      margin: '5% auto auto auto',
       toggleAction: 'remove',
     },
     plot: {
@@ -711,60 +920,137 @@ function toTimestamp(strDate){
   
     series: [
       {
-        text: 'Ojos y ojera',
+        text: 'MASTITIS',
         values: array1,
-        backgroundColor: '#8DD62E',
-        lineColor: '#8DD62E',
+        backgroundColor: '#00BAF2',
+        lineColor: '#00BAF2',
         lineWidth: '2px',
         marker: {
           type: 'circle',
-          backgroundColor: '#8DD62E',
-          borderColor: '#8DD62E',
+          backgroundColor: '#00BAF2',
+          borderColor: '#00BAF2',
           borderWidth: '0px',
           shadow: false,
           size: '4px',
         },
       },
       {
-        text: 'Piel',
+        text: 'BABESIOSIS',
         values: array2,
-        backgroundColor: '#FF006F',
-        lineColor: '#FF006F',
+        backgroundColor: '#E80C60',
+        lineColor: '#E80C60',
         lineWidth: '2px',
         marker: {
           type: 'circle',
-          backgroundColor: '#FF006F',
-          borderColor: '#FF006F',
+          backgroundColor: '#E80C60',
+          borderColor: '#E80C60',
           borderWidth: '0px',
           shadow: false,
           size: '4px',
         },
       },
       {
-        text: 'Postura y movimiento',
+        text: 'BRUCELOSIS',
         values: array3,
-        backgroundColor: '#00D3E6',
-        lineColor: '#00D3E6',
+        backgroundColor: '#9B26AF',
+        lineColor: '#9B26AF',
         lineWidth: '2px',
         marker: {
           type: 'circle',
-          backgroundColor: '#00D3E6',
-          borderColor: '#00D3E6',
+          backgroundColor: '#9B26AF',
+          borderColor: '#9B26AF',
           borderWidth: '0px',
           shadow: false,
           size: '4px',
         },
       },
       {
-        text: 'Apetito',
+        text: 'FIEBRE AFTOSA',
         values: array4,
-        backgroundColor: '#FFD540',
-        lineColor: '#FFD540',
+        backgroundColor: '#5ddb00',
+        lineColor: '#5ddb00',
         lineWidth: '2px',
         marker: {
           type: 'circle',
-          backgroundColor: '#FFD540',
-          borderColor: '#FFD540',
+          backgroundColor: '#5ddb00',
+          borderColor: '#5ddb00',
+          borderWidth: '0px',
+          shadow: false,
+          size: '4px',
+        },
+      },
+      {
+        text: 'TUBERCULOSIS',
+        values: array5,
+        backgroundColor: '#D4AC0D',
+        lineColor: '#D4AC0D',
+        lineWidth: '2px',
+        marker: {
+          type: 'circle',
+          backgroundColor: '#D4AC0D',
+          borderColor: '#D4AC0D',
+          borderWidth: '0px',
+          shadow: false,
+          size: '4px',
+        },
+      },
+      {
+        text: 'CLOSTRIDIOSIS',
+        values: array6,
+        backgroundColor: '#592BC4',
+        lineColor: '#592BC4',
+        lineWidth: '2px',
+        marker: {
+          type: 'circle',
+          backgroundColor: '#592BC4',
+          borderColor: '#592BC4',
+          borderWidth: '0px',
+          shadow: false,
+          size: '4px',
+        },
+      },
+      {
+        text: 'LEPTOSPIROSIS',
+        values: array7,
+        backgroundColor: '#C4492B',
+        lineColor: '#C4492B',
+        lineWidth: '2px',
+        marker: {
+          type: 'circle',
+          backgroundColor: '#C4492B',
+          borderColor: '#C4492B',
+          borderWidth: '0px',
+          shadow: false,
+          size: '4px',
+        },
+      },
+      {
+        text: 'PROBLEMAS EN LAS PEZUÑAS',
+        values: array8,
+        backgroundColor: '#2BC4BB',
+        lineColor: '#2BC4BB',
+        lineWidth: '2px',
+        marker: {
+          type: 'circle',
+          backgroundColor: '#2BC4BB',
+          borderColor: '#2BC4BB',
+          fontSize: '10px',
+          borderWidth: '0px',
+          shadow: false,
+          size: '4px',
+        },
+      },
+      {
+        text: 'PARÁSITOS',
+        values: array9,
+        backgroundColor: '#E7009E',
+        lineColor: '#E7009E',
+        lineWidth: '2px',
+        marker: {
+          type: 'circle',
+          backgroundColor: '#E7009E',
+          borderColor: '#E7009E',
+          fontSize: '10px',
           borderWidth: '0px',
           shadow: false,
           size: '4px',
