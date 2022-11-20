@@ -124,15 +124,6 @@ function printToUser(typeUser){
                         type = "Administrador"
                     }
     
-                    var values = {
-                        n : ctx,
-                        name : data.data().name,
-                        type : type,
-                        dni : data.data().dni,
-                        phone : data.data().phone,
-                        email : data.data().email
-    
-                    }
     
                     users.push([ctx,data.data().name,type,data.data().dni,data.data().phone,data.data().email])
                 }
@@ -164,7 +155,7 @@ function printToIllness(illness){
 
     Swal.fire({
         title: 'En breves se descargará el archivo!',
-        timer: 4000,
+        timer: 5000,
         timerProgressBar: true,
         didOpen: () => {
           Swal.showLoading()
@@ -192,20 +183,23 @@ function printToIllness(illness){
                     gender = "Hembra"
                 }
 
-                var values = {
-                    n : ctx,
-                    cow : data.data().cow,
-                    gender : gender,
-                    signs : data.data().signs,
-                    description : data.data().description
-
-                }
                 
-                arrayIllness.push([values])
+                arrayIllness.push([ctx,data.data().cow,gender,data.data().signs])
     
             });
+
+            if(ctx != 0){
+                console.log(arrayIllness)
+                printIllness(arrayIllness,illness)
+            }else{
+                    Swal.fire(
+                        'Oopss!',
+                        'No existen datos!',
+                        'warning'
+                      )
+            }
     
-            console.log(arrayIllness)
+           
     
         })
     }else{
@@ -215,25 +209,231 @@ function printToIllness(illness){
 
                 ctx++
 
-                var values = {
-                    n : ctx,
-                    cow : data.data().cow,
-                    gender : gender,
-                    signs : data.data().signs,
-                    description : data.data().description
+                var gender = ""
 
+                if(data.data().gender == "male"){
+
+                    gender = "Macho"
+
+                }else{
+                    gender = "Hembra"
                 }
-                
-                arrayIllness.push([values])
+
+                arrayIllness.push([ctx,data.data().cow,gender,data.data().signs])
     
             });
     
-            console.log(arrayIllness)
+            if(ctx != 0){
+                console.log(arrayIllness)
+                printIllness(arrayIllness,illness)
+            }else{
+                    Swal.fire(
+                        'Oopss!',
+                        'No existen datos!',
+                        'warning'
+                      )
+            }
     
         })
     }
+}
 
-    
+function printToIncident(typeQuery){
+
+
+    var incidents = []
+    var date
+
+    if(typeQuery == "today"){
+
+        
+    Swal.fire({
+        title: 'En breves se descargará el archivo!',
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      })
+
+        var today = Date.now()
+        date = onlyDateNumber(today)
+        var first = onlyDateNumber(today).split("/")
+        first = first[2]+"/"+first[1]+"/"+first[0]+" 00:01"
+        first = toTimestamp(first)
+
+        var second = onlyDateNumber(today).split("/")
+        second = second[2]+"/"+second[1]+"/"+second[0]+" 23:59"
+        second = toTimestamp(second)
+
+        db.collection("incidents").where("date", ">=" ,first).where("date","<=",second).get().then((query) =>{
+
+            var ctx = 0
+
+            query.forEach(data => {
+                ctx++
+                var gender = ""
+
+                if(data.data().gender == "male"){
+
+                    gender = "Macho"
+
+                }else{
+                    gender = "Hembra"
+                }
+                incidents.push([ctx,data.data().cow,gender,data.data().signs,data.data().description,data.data().user])
+            });
+
+            if(ctx != 0){
+                printIncident(incidents,date)
+            }else{
+                Swal.fire(
+                    'Oopss!',
+                    'No existen datos!',
+                    'warning'
+                  )
+            }
+
+            console.log(incidents)
+            
+
+        })
+
+    }else if(typeQuery == "date_specific"){
+        Swal.fire({
+            title: 'Seleccione una fecha',
+            html:
+              '<input id="specific" type="date" placeholder="Selccione una fecha" />',
+          
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: 'Ok',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+              var value = document.getElementById("specific").value
+              if(value != ""){
+
+                date = value
+                var first = value+" 00:01"
+                first = toTimestamp(first)
+
+                var second = value+" 23:59"
+                second = toTimestamp(second)
+
+
+                Swal.fire({
+                    title: 'En breves se descargará el archivo!',
+                    timer: 4000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                      Swal.showLoading()
+                    },
+                  })
+
+                  db.collection("incidents").where("date", ">=" ,first).where("date","<=",second).get().then((query) =>{
+
+                    var ctx = 0
+        
+                    query.forEach(data => {
+                        ctx++
+                        var gender = ""
+        
+                        if(data.data().gender == "male"){
+        
+                            gender = "Macho"
+        
+                        }else{
+                            gender = "Hembra"
+                        }
+                        incidents.push([ctx,data.data().cow,gender,data.data().signs,data.data().description,data.data().user])
+                    });
+        
+                    if(ctx != 0){
+                        printIncident(incidents,date)
+                    }else{
+                        Swal.fire(
+                            'Oopss!',
+                            'No existen datos!',
+                            'warning'
+                          )
+                    }
+        
+                    console.log(incidents)
+                    
+        
+                })
+
+
+              }else{
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.addEventListener('mouseenter', Swal.stopTimer)
+                      toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
+
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Seleccione una fecha'
+                  })
+              }  
+
+            } 
+          })
+    }else{
+        Swal.fire({
+            title: 'En breves se descargará el archivo!',
+            timer: 4000,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading()
+            },
+          })
+
+
+          db.collection("incidents").get().then((query) =>{
+
+            var ctx = 0
+
+            query.forEach(data => {
+                ctx++
+                var gender = ""
+
+                if(data.data().gender == "male"){
+
+                    gender = "Macho"
+
+                }else{
+                    gender = "Hembra"
+                }
+                incidents.push([ctx,data.data().cow,gender,data.data().signs,data.data().description,data.data().user])
+            });
+
+            if(ctx != 0){
+                date = onlyDateNumber(Date.now())
+                printIncident(incidents,date)
+            }else{
+                Swal.fire(
+                    'Oopss!',
+                    'No existen datos!',
+                    'warning'
+                  )
+            }
+
+            console.log(incidents)
+            
+
+        })
+
+    }
 }
 
 
@@ -265,6 +465,69 @@ function printUsers(array,type){
   
   }
 
+  function printIllness(array,type){
+
+    if(type == "all"){
+        type = "Reporte de enfermedades : "
+    }else{
+        type = "Reporte de la enfermedad "+type+" : "
+    }
+   
+    var doc = new jspdf.jsPDF()
+    doc.setFontSize(26)
+    doc.text(30, 16, "Cow Manager")
+    doc.setFontSize(9)
+    doc.text(30, 22, type+onlyDateNumber(Date.now()))
+    doc.setFontSize(9)
+    doc.text(155, 14, "RUC : "+"121212121212")
+    doc.text(155, 19, "Direccion : "+"Jr.Los girasoles Mz6 L9")
+    doc.text(155, 24, "Teléfono : "+"+51989280394")
+    doc.setFontSize(12)
+    doc.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
+      doc.autoTable({
+      head: [['#','ID de Vaca','Género','Enfermedad']],
+      body: array,
+      theme: 'grid',
+      styles : { halign : 'center'},
+     headStyles :{fillColor : [0, 142, 138]}, 
+     alternateRowStyles: {fillColor : [238, 255, 254]}, 
+     tableLineColor: [0, 142, 138], 
+     tableLineWidth: 0.1,
+     margin: {top: 32},
+      })
+      doc.save(type+'_'+onlyDateNumber(Date.now())+'.pdf')
+  
+  }
+
+  function printIncident(array,date){
+
+    var doc = new jspdf.jsPDF()
+    doc.setFontSize(26)
+    doc.text(30, 16, "Cow Manager")
+    doc.setFontSize(9)
+    doc.text(30, 22, "Reporte de incidente : "+date)
+    doc.setFontSize(9)
+    doc.text(155, 14, "RUC : "+"121212121212")
+    doc.text(155, 19, "Direccion : "+"Jr.Los girasoles Mz6 L9")
+    doc.text(155, 24, "Teléfono : "+"+51989280394")
+    doc.setFontSize(12)
+    doc.addImage('/dashboard/assets/imgs/cowlogo.png', 'JPEG', 7, 2, 20, 20)
+      doc.autoTable({
+      head: [['#','ID de Vaca','Género','Enfermedad','Descripción','Reportado por']],
+      body: array,
+      theme: 'grid',
+      styles : { halign : 'center'},
+     headStyles :{fillColor : [0, 142, 138]}, 
+     alternateRowStyles: {fillColor : [238, 255, 254]}, 
+     tableLineColor: [0, 142, 138], 
+     tableLineWidth: 0.1,
+     margin: {top: 32},
+      })
+      doc.save('Reporte de incidentes'+'_'+date+'.pdf')
+  
+  }
+
+
   function onlyDateNumber(UNIX_timestamp){
     var a = new Date(UNIX_timestamp);
     var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
@@ -278,3 +541,8 @@ function printUsers(array,type){
     var time = date + '/' + month + '/' + year;
     return time;
   }
+
+  function toTimestamp(strDate){
+	var datum = Date.parse(strDate);
+	return datum;
+ }
